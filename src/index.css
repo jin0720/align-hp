@@ -239,11 +239,12 @@ nav a:hover {
   background-color: transparent;
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
-  padding: 8px 24px;
-  border-radius: 4px; /* Classy square edges slightly rounded */
-  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
+  white-space: nowrap; /* テキストを1行に強制 */
 }
 
 .nav-reserve-btn:hover {
@@ -1052,18 +1053,31 @@ nav a:hover {
   justify-content: center;
   background-color: #06C755;
   color: white;
-  padding: 20px 50px;
-  border-radius: 4px;
-  font-size: 1.2rem;
+  padding: 18px 25px;
+  border-radius: 8px;
+  font-size: 1.1rem;
   font-weight: 600;
-  gap: 15px;
+  gap: 10px;
   transition: all 0.3s;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  white-space: nowrap; /* テキストを1行に強制 */
 }
 
 .line-btn-lux:hover {
   background-color: #05A546;
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(6, 199, 85, 0.3);
+}
+
+@media (max-width: 480px) {
+  .line-btn-lux {
+    font-size: 0.85rem;
+    padding: 15px 15px;
+    gap: 6px;
+  }
 }
 
 /* Access / Salons */
@@ -1087,15 +1101,38 @@ nav a:hover {
 .salon-card {
   background: var(--bg-dark);
   border: 1px solid var(--border-color);
-  padding: 40px;
+  padding: 0; /* Changed to 0 to allow full-width image */
   border-radius: 4px;
   position: relative;
   transition: transform 0.3s ease;
+  overflow: hidden; /* Ensure image corners are clipped */
 }
 
 .salon-card:hover {
   transform: translateY(-5px);
   border-color: var(--primary-color);
+}
+
+.salon-image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Square ratio for better balance with text */
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.salon-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.salon-card:hover .salon-image-wrap img {
+  transform: scale(1.05);
+}
+
+.salon-card-body {
+  padding: 30px 40px;
 }
 
 .salon-card.silver:hover {
@@ -1251,9 +1288,12 @@ nav a:hover {
   }
 
   .header-nav .nav-reserve-btn {
-    width: 100%;
+    width: 90%;
+    margin: 20px auto 0;
     text-align: center;
-    margin-top: 20px;
+    font-size: 0.75rem;
+    padding: 12px 10px;
+    white-space: nowrap;
   }
   
   .hero {

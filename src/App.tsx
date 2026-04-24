@@ -60,7 +60,7 @@ function App() {
 
             <li><a href="#access" onClick={(e) => { e.preventDefault(); scrollTo('access'); }}>アクセス</a></li>
           </ul>
-          <a href="#contact" className="nav-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>初回1,000円OFFで予約</a>
+          <a href="#contact" className="nav-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>オープン記念割引1000円OFFで予約</a>
         </nav>
       </header>
 
@@ -72,7 +72,7 @@ function App() {
         <div className="hero-content fade-in-section is-visible">
           <h1 id="text-main-logo" className="main-logo-text">Align</h1>
           <div className="hero-badge">
-            【初回限定】全コース1,000円OFFでご体験いただけます
+            【オープン記念】全コース1,000円OFFでご体験いただけます
           </div>
           <p className="hero-catchphrase">
             <span className="inline-block">身体をリセットし、明日を創る。</span>
@@ -191,7 +191,7 @@ function App() {
               </div>
               <div className="cal-notice text-center mt-5">
                 <p className="text-light-on-dark mb-4">お問い合わせ・ご予約は公式LINEから承ります</p>
-                <a href="https://lin.ee/TJpea3W" target="_blank" rel="noopener noreferrer" className="btn-gold">
+                <a href="https://line.me/R/ti/p/@782majcy?ts=04242132&oat_content=url" target="_blank" rel="noopener noreferrer" className="btn-gold">
                   LINEで予約する <ArrowRight size={16} className="icon-inline" style={{marginLeft: '5px'}}/>
                 </a>
               </div>
@@ -377,39 +377,49 @@ function App() {
             <div className="salons-container">
               {/* Treatment Salon */}
               <div className="salon-card">
-                <div className="salon-card-header">
-                  <div className="salon-tag">TREATMENT</div>
-                  <h3>施術場所</h3>
+                <div className="salon-image-wrap">
+                  <img src="/images/new/IMG_2243.jpg" alt="Treatment space" />
                 </div>
-                <div className="salon-list">
-                  <div className="salon-item">
-                    <MapPin className="icon-gold" size={18} />
-                    <div className="salon-info">
-                      <span className="station">東高円寺駅</span>
-                      <span className="walk">徒歩3分</span>
+                <div className="salon-card-body">
+                  <div className="salon-card-header">
+                    <div className="salon-tag">TREATMENT</div>
+                    <h3>施術場所</h3>
+                  </div>
+                  <div className="salon-list">
+                    <div className="salon-item">
+                      <MapPin className="icon-gold" size={18} />
+                      <div className="salon-info">
+                        <span className="station">東高円寺駅</span>
+                        <span className="walk">徒歩3分</span>
+                      </div>
                     </div>
                   </div>
+                  <p className="salon-card-note">※プライベートサロンのため、詳細な住所はご予約確定後にお送りいたします。</p>
                 </div>
-                <p className="salon-card-note">※プライベートサロンのため、詳細な住所はご予約確定後にお送りいたします。</p>
               </div>
 
               {/* Training Gym */}
               <div className="salon-card silver">
-                <div className="salon-card-header">
-                  <div className="salon-tag">TRAINING</div>
-                  <h3>トレーニング場所</h3>
+                <div className="salon-image-wrap">
+                  <img src="/images/new/IMG_2250.jpg" alt="Training space" />
                 </div>
-                <div className="salon-list">
-                  <div className="salon-item">
-                    <MapPin className="icon-silver" size={18} />
-                    <div className="salon-info">
-                      <span className="station">中野 / 新中野 / 西新宿 / 西新宿五丁目</span>
+                <div className="salon-card-body">
+                  <div className="salon-card-header">
+                    <div className="salon-tag">TRAINING</div>
+                    <h3>トレーニング場所</h3>
+                  </div>
+                  <div className="salon-list">
+                    <div className="salon-item">
+                      <MapPin className="icon-silver" size={18} />
+                      <div className="salon-info">
+                        <span className="station">中野 / 新中野 / 西新宿 / 西新宿五丁目</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="salon-card-note" style={{display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem', color: '#8c8c8c'}}>
-                  <p>※ご希望の店舗がない場合は「中野」をご案内させていただきます。</p>
-                  <p>※レンタルジムを使用するため、予約状況によりエリアのご希望に添えない場合がございます。</p>
+                  <div className="salon-card-note" style={{display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem', color: '#8c8c8c'}}>
+                    <p>※ご希望の店舗がない場合は「中野」をご案内させていただきます。</p>
+                    <p>※レンタルジムを使用するため、予約状況によりエリアのご希望に添えない場合がございます。</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -434,9 +444,9 @@ function App() {
                   <small className="inline-block">※施術中はご返信が遅れる場合がございますが、</small><small className="inline-block">必ず折り返しご連絡いたします。</small>
                 </p>
                 
-                <a href="https://lin.ee/TJpea3W" target="_blank" rel="noopener noreferrer" className="line-btn-lux">
+                <a href="https://lin.ee/uYY4SNW" target="_blank" rel="noopener noreferrer" className="line-btn-lux">
                   <MessageCircle size={24} />
-                  初回1,000円OFF ｜ LINEで予約・相談する
+                  オープン記念割引1000円OFF｜LINEで予約する
                 </a>
               </div>
             </div>
