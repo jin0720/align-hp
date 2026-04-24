@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>LINEリッチメニュー画像生成</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 50px 0;
+      background: #f0f0f0; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Shippori Mincho', serif;
+    }
+
+    .notice {
+      margin-bottom: 20px;
+      padding: 15px 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 800px;
+    }
+
+    button {
+      background: #d4af37;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-bottom: 30px;
+      font-family: inherit;
+      transition: background 0.3s;
+    }
+    button:hover { background: #b8962c; }
+
+    /* LINE Rich Menu target size (1200 x 810 for Large) */
+    .rich-menu-wrapper {
+      width: 1200px;
+      height: 810px;
+      background-color: #0a0a0a; /* Almost black */
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      border: 2px solid #8f7442;
+      box-sizing: border-box;
+      position: relative;
+    }
+    
+    /* Subtle radial glow */
+    .rich-menu-wrapper::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(191, 159, 108, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .menu-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgba(191, 159, 108, 0.25);
+      color: #dfcd9f;
+      position: relative;
+    }
+
+    /* Inner framing for elegant style */
+    .menu-item::after {
+      content: "";
+      position: absolute;
+      top: 15px; left: 15px; right: 15px; bottom: 15px;
+      border: 1px solid rgba(223, 205, 159, 0.15);
+      pointer-events: none;
+    }
+
+    .menu-item svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 24px;
+      stroke: #d4af37;
+      stroke-width: 1.2px;
+    }
+
+    /* Highlight the Reservation tile slightly */
+    .menu-item.reserve {
+      background: linear-gradient(145deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+    }
+    .menu-item.reserve::after {
+      border: 1px solid rgba(223, 205, 159, 0.3);
+    }
+
+    .title {
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: rgba(223, 205, 159, 0.6);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+  </style>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Use html2canvas to allow 1-click download -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <div class="notice">
+    <h2>LINE リッチメニュー画像</h2>
+    <p>下の「画像をダウンロード」ボタンを押すと、LINEにそのまま登録できるサイズ（1200x810）で画像が保存されます。<br>お店の雰囲気に合わせた黒×ゴールドのラグジュアリーなデザインに仕上げました。</p>
+  </div>
+  
+  <button onclick="downloadImage()">画像をダウンロード</button>
+
+  <div id="capture-area" class="rich-menu-wrapper">
+    
+    <!-- Top Row -->
+    <div class="menu-item reserve">
+      <i data-lucide="mail-check"></i>
+      <div class="title">ご予約</div>
+      <div class="subtitle">RESERVATION</div>
+    </div>
+    <div class="menu-item">
+      <i data-lucide="calendar-clock"></i>
+      <div class="title">空き状況</div>
+      <div class="subtitle">SCHEDULE</div>
+    </div>
+    <div class="menu-item">
+      <i data-lucide="book-open"></i>
+      <div class="title">料金・メニュー</div>
+      <div class="subtitle">PRICE & MENU</div>
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="menu-item">
+      <i data-lucide="map-pin"></i>
+      <div class="title">アクセス</div>
+      <div class="subtitle">ACCESS</div>
+    </div>
+    <div class="menu-item">
+      <i data-lucide="user"></i>
+      <div class="title">セラピスト紹介</div>
+      <div class="subtitle">PROFILE</div>
+    </div>
+    <div class="menu-item">
+      <i data-lucide="globe"></i>
+      <div class="title">公式サイト</div>
+      <div class="subtitle">WEBSITE</div>
+    </div>
+
+  </div>
+
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    function downloadImage() {
+      const element = document.getElementById('capture-area');
+      html2canvas(element, {
+        scale: 1, // keep it exactly 1200x810
+        backgroundColor: '#0a0a0a'
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'line_rich_menu.jpg'; // Save as high-quality JPG
+        link.href = canvas.toDataURL('image/jpeg', 0.95);
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
