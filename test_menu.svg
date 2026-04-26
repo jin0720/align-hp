@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="1686" viewBox="0 0 2500 1686">
+  <rect width="2500" height="1686" fill="#FFFFFF"/>
+  <line x1="833.3" y1="0" x2="833.3" y2="1686" stroke="#C2B280" stroke-width="4"/>
+  <line x1="1666.6" y1="0" x2="1666.6" y2="1686" stroke="#C2B280" stroke-width="4"/>
+  <line x1="0" y1="843" x2="2500" y2="843" stroke="#C2B280" stroke-width="4"/>
+  
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#4A4A4A" font-size="80" text-anchor="middle">
+    <!-- Row 1 -->
+    <text x="416.6" y="470">マッサージ予約</text>
+    <text x="1250" y="470">トレーニング予約</text>
+    <text x="2083.3" y="470">空き状況</text>
+    <!-- Row 2 -->
+    <text x="416.6" y="1313">コンセプト</text>
+    <text x="1250" y="1313">料金・メニュー</text>
+    <text x="2083.3" y="1313">アクセス</text>
+  </g>
+</svg>
