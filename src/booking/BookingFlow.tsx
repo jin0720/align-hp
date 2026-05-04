@@ -2,7 +2,7 @@
  * BookingFlow.tsx - 予約フロー全体管理（ルーティング＆状態遷移）
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useBooking } from './useBooking';
 import { MenuSelect } from './MenuSelect';
 import { DateTimeSelect } from './DateTimeSelect';
@@ -32,6 +32,20 @@ export const BookingFlow: React.FC = () => {
     cancelBooking,
     resetBooking,
   } = useBooking();
+
+  // ── URL パラメータによる初期画面遷移 ──────────────────────
+  // リッチメニューから ?view=history で開いた場合に予約確認画面へ直接遷移
+  const [initialNavDone, setInitialNavDone] = useState(false);
+  useEffect(() => {
+    if (!initialNavDone && userProfile) {
+      const view = new URLSearchParams(window.location.search).get('view');
+      if (view === 'history') {
+        setInitialNavDone(true);
+        fetchBookingHistory(userProfile.userId);
+        setCurrentStep('history');
+      }
+    }
+  }, [userProfile, initialNavDone, fetchBookingHistory, setCurrentStep]);
 
   // ── ステップ遷移ハンドラー ──────────────────────────────
   const handleMenuNext = () => {
