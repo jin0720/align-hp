@@ -202,22 +202,25 @@ export function useBooking() {
 
   // ── 予約を送信 ──────────────────────────────────────────
   const submitBooking = useCallback(async () => {
-    const profile = userProfile ?? { userId: 'demo-user', name: 'お客様' };
+    if (!userProfile) {
+      setError('LINEアプリ内から開いてください（LIFF未初期化）');
+      return;
+    }
 
     setLoading(true);
     setError(null);
     try {
       const bookingData = {
         ...booking,
-        userId: profile.userId,
-        name: booking.name || profile.name,
+        userId: userProfile.userId,
+        name: booking.name || userProfile.name,
       };
 
       const res = await fetchWithTimeout(`${API_BASE}/api/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingData),
-      }, 8000);
+      }, 15000);
 
       const data = await res.json();
 
@@ -236,14 +239,8 @@ export function useBooking() {
       setBooking(prev => ({ ...prev, endTime: data.booking.endTime, bookingRef }));
       setCurrentStep('complete');
     } catch (err) {
-      // APIが応答しない場合（スリープ中など）はデモとして完了扱い
-      console.warn('予約APIエラー、デモ完了:', err);
-      const [h, m] = booking.time.split(':').map(Number);
-      const total = h * 60 + m + booking.duration;
-      const endTime = `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
-      const bookingRef = 'AL' + Date.now().toString(36).toUpperCase();
-      setBooking(prev => ({ ...prev, endTime, bookingRef }));
-      setCurrentStep('complete');
+      console.error('予約APIエラー:', err);
+      setError('サーバーへの接続に失敗しました。しばらく待ってから再度お試しください。');
     } finally {
       setLoading(false);
     }
