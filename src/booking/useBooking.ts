@@ -113,8 +113,10 @@ export function useBooking() {
         setBooking(prev => ({ ...prev, name: prev.name || profile.displayName }));
 
         console.log('✅ LIFF ユーザー情報取得:', profile.displayName, '/ userId:', profile.userId);
-      } catch (err) {
-        console.error('LIFF セットアップエラー:', err);
+      } catch (err: any) {
+        const msg = err?.message || String(err);
+        console.error('LIFF セットアップエラー:', msg);
+        setError(`LINE連携エラー: ${msg} — LINEアプリから開き直してください`);
       }
     };
 
