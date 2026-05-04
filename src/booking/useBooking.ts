@@ -68,17 +68,22 @@ export function useBooking() {
   const [bookingHistory, setBookingHistory] = useState<BookingHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [liffStatus, setLiffStatus] = useState<string>('初期化中');
 
   // ── LIFF 初期化とユーザー情報取得 ──────────────────────
   useEffect(() => {
     const initLiff = async () => {
       try {
         if (!window.liff) {
+          setLiffStatus('SDK読込中');
           const script = document.createElement('script');
           script.src = 'https://static.line-app.com/sdk/js/liff.js';
           script.async = true;
           script.onload = async () => {
             await setupLiff();
+          };
+          script.onerror = () => {
+            setLiffStatus('SDKロード失敗');
           };
           document.head.appendChild(script);
         } else {
@@ -86,36 +91,44 @@ export function useBooking() {
         }
       } catch (err) {
         console.error('LIFF 初期化エラー:', err);
-        setError('LINE 連携エラーが発生しました');
+        setLiffStatus('初期化例外');
       }
     };
 
     const setupLiff = async () => {
-      if (!window.liff) return;
+      if (!window.liff) {
+        setLiffStatus('SDK未ロード');
+        return;
+      }
 
       // env 未設定時は既知の LIFF ID にフォールバック
       const liffId = import.meta.env.VITE_LINE_LIFF_ID || '2009962690-j5dQBfYL';
+      setLiffStatus(`init中(${liffId.slice(-6)})`);
 
       try {
         await window.liff.init({ liffId, withLoginOnExternalBrowser: true });
 
         if (!window.liff.isLoggedIn()) {
           console.warn('LIFF: 未ログイン → LINE ログインにリダイレクト');
+          setLiffStatus('ログインへ');
           window.liff.login();
           return;
         }
 
+        setLiffStatus('プロフィール取得中');
         const profile = await window.liff.getProfile();
         setUserProfile({
           userId: profile.userId,
           name: profile.displayName,
         });
         setBooking(prev => ({ ...prev, name: prev.name || profile.displayName }));
+        setLiffStatus('OK');
 
         console.log('✅ LIFF ユーザー情報取得:', profile.displayName, '/ userId:', profile.userId);
       } catch (err: any) {
         const msg = err?.message || String(err);
         console.error('LIFF セットアップエラー:', msg);
+        setLiffStatus(`ERR:${msg.slice(0, 30)}`);
         setError(`LINE連携エラー: ${msg} — LINEアプリから開き直してください`);
       }
     };
@@ -334,6 +347,7 @@ export function useBooking() {
     weekAvailability,
     weekLoading,
     userProfile,
+    liffStatus,
     bookingHistory,
     loading,
     error,
