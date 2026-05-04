@@ -1,8 +1,17 @@
 import { useEffect, useState } from 'react';
 import { MessageCircle, Calendar, Clock, User, CheckCircle, Heart, Activity, ArrowRight, MapPin, Menu, X } from 'lucide-react';
+import { BookingFlow } from './booking';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // ── ルーティング判定 ────────────────────────────────────
+  const isBookingPage = window.location.pathname.startsWith('/booking');
+
+  // Mini App ページの場合
+  if (isBookingPage) {
+    return <BookingFlow />;
+  }
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
