@@ -19,16 +19,6 @@ const fetchWithTimeout = (url: string, options?: RequestInit, ms = 5000): Promis
   return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
 };
 
-const DEMO_SLOTS: string[] = (() => {
-  const slots: string[] = [];
-  for (let h = 10; h <= 22; h++) {
-    for (const m of [0, 30]) {
-      if (h === 22 && m === 30) break;
-      slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
-    }
-  }
-  return slots;
-})();
 
 const FALLBACK_MENUS: Menu[] = [
   {
