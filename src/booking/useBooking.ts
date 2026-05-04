@@ -93,26 +93,26 @@ export function useBooking() {
     const setupLiff = async () => {
       if (!window.liff) return;
 
-      const liffId = import.meta.env.VITE_LINE_LIFF_ID || '';
-      if (!liffId) {
-        console.warn('⚠️  VITE_LINE_LIFF_ID が設定されていません');
-        return;
-      }
+      // env 未設定時は既知の LIFF ID にフォールバック
+      const liffId = import.meta.env.VITE_LINE_LIFF_ID || '2009962690-j5dQBfYL';
 
       try {
         await window.liff.init({ liffId, withLoginOnExternalBrowser: true });
 
-        if (!window.liff.isLoggedIn()) return;
+        if (!window.liff.isLoggedIn()) {
+          console.warn('LIFF: 未ログイン → LINE ログインにリダイレクト');
+          window.liff.login();
+          return;
+        }
 
         const profile = await window.liff.getProfile();
         setUserProfile({
           userId: profile.userId,
           name: profile.displayName,
         });
-        // LINEプロフィール名を予約情報に自動セット
         setBooking(prev => ({ ...prev, name: prev.name || profile.displayName }));
 
-        console.log('✅ LIFF ユーザー情報取得:', profile.displayName);
+        console.log('✅ LIFF ユーザー情報取得:', profile.displayName, '/ userId:', profile.userId);
       } catch (err) {
         console.error('LIFF セットアップエラー:', err);
       }
