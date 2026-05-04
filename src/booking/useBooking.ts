@@ -3,6 +3,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
+import liff from '@line/liff';
 import type {
   BookingStep,
   BookingSession,
@@ -73,50 +74,21 @@ export function useBooking() {
   // ── LIFF 初期化とユーザー情報取得 ──────────────────────
   useEffect(() => {
     const initLiff = async () => {
-      try {
-        if (!window.liff) {
-          setLiffStatus('SDK読込中');
-          const script = document.createElement('script');
-          script.src = 'https://static.line-app.com/sdk/js/liff.js';
-          script.async = true;
-          script.onload = async () => {
-            await setupLiff();
-          };
-          script.onerror = () => {
-            setLiffStatus('SDKロード失敗');
-          };
-          document.head.appendChild(script);
-        } else {
-          await setupLiff();
-        }
-      } catch (err) {
-        console.error('LIFF 初期化エラー:', err);
-        setLiffStatus('初期化例外');
-      }
-    };
-
-    const setupLiff = async () => {
-      if (!window.liff) {
-        setLiffStatus('SDK未ロード');
-        return;
-      }
-
-      // env 未設定時は既知の LIFF ID にフォールバック
       const liffId = import.meta.env.VITE_LINE_LIFF_ID || '2009962690-j5dQBfYL';
       setLiffStatus(`init中(${liffId.slice(-6)})`);
 
       try {
-        await window.liff.init({ liffId, withLoginOnExternalBrowser: true });
+        await liff.init({ liffId, withLoginOnExternalBrowser: true });
 
-        if (!window.liff.isLoggedIn()) {
+        if (!liff.isLoggedIn()) {
           console.warn('LIFF: 未ログイン → LINE ログインにリダイレクト');
           setLiffStatus('ログインへ');
-          window.liff.login();
+          liff.login();
           return;
         }
 
         setLiffStatus('プロフィール取得中');
-        const profile = await window.liff.getProfile();
+        const profile = await liff.getProfile();
         setUserProfile({
           userId: profile.userId,
           name: profile.displayName,
@@ -361,9 +333,3 @@ export function useBooking() {
   };
 }
 
-// LIFF の型定義（グローバルスコープ用）
-declare global {
-  interface Window {
-    liff: any;
-  }
-}
