@@ -75,11 +75,7 @@ export function useBooking() {
   useEffect(() => {
     const initLiff = async () => {
       const liffId = import.meta.env.VITE_LINE_LIFF_ID || '2009962690-j5dQBfYL';
-      const hasLiffState = window.location.search.includes('liff.state');
-      const pathInfo = window.location.pathname.slice(0, 10);
-      setLiffStatus(`init中 path:${pathInfo} liff:${hasLiffState ? 'YES' : 'NO'}`);
-      console.log('[LIFF] URL:', window.location.href);
-      console.log('[LIFF] liff.state in URL:', hasLiffState);
+      setLiffStatus('init中');
 
       try {
         await liff.init({ liffId, withLoginOnExternalBrowser: true });

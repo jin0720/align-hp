@@ -22,7 +22,6 @@ export const BookingFlow: React.FC = () => {
     weekAvailability,
     weekLoading,
     userProfile,
-    liffStatus,
     bookingHistory,
     loading,
     error,
@@ -175,10 +174,6 @@ export const BookingFlow: React.FC = () => {
     <div className="bg-white min-h-screen">
       {showIndicator && <StepIndicator currentStep={currentStep} />}
       {renderStep()}
-      {/* バージョン確認用 — 動作確認後に削除 */}
-      <div style={{ position: 'fixed', bottom: 4, right: 6, fontSize: 10, color: '#bbb', zIndex: 9999 }}>
-        v2026-05-04d · {userProfile ? `✅ ${userProfile.userId.slice(0, 6)}…` : `⚠️ ${liffStatus}`}
-      </div>
     </div>
   );
 };
