@@ -267,6 +267,7 @@ export function useBooking() {
           time: bookingItem.time,
           endTime: bookingItem.endTime,
           menu: bookingItem.menu,
+          duration: bookingItem.duration,
           name: bookingItem.name,
         }),
       });
