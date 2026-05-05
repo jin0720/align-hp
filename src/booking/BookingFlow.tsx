@@ -156,12 +156,6 @@ export const BookingFlow: React.FC = () => {
               resetBooking();
               setCurrentStep('menu');
             }}
-            userId={userProfile?.userId}
-            onFetchHistory={
-              userProfile
-                ? async (userId) => fetchBookingHistory(userId)
-                : undefined
-            }
           />
         );
 
