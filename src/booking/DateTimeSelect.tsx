@@ -86,6 +86,17 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
     loadWeek();
   }, [loadWeek]);
 
+  // iOSのbodyスクロールを封じる（LIFFでの戻り現象を防ぐ）
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+      document.documentElement.style.overflow = '';
+    };
+  }, []);
+
   const handlePrevWeek = () => {
     const prev = new Date(weekStart);
     prev.setDate(weekStart.getDate() - 7);
@@ -122,7 +133,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
   const canGoPrev = new Date(weekStart).setDate(weekStart.getDate() - 7) >= today.getTime();
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
+    <div className="fixed inset-0 flex flex-col bg-gray-50" style={{ zIndex: 0 }}>
       {/* ナビゲーション */}
       <div className="flex items-center justify-between px-4 py-2 bg-white border-b text-sm font-bold">
         <button
