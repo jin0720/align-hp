@@ -122,7 +122,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
   const canGoPrev = new Date(weekStart).setDate(weekStart.getDate() - 7) >= today.getTime();
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
       {/* ナビゲーション */}
       <div className="flex items-center justify-between px-4 py-2 bg-white border-b text-sm font-bold">
         <button
@@ -140,7 +140,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
       </div>
 
       {/* グリッド */}
-      <div className="flex-1 overflow-auto pb-28">
+      <div className="flex-1 overflow-auto pb-28" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
         <div className="relative">
           {/* 読み込み中オーバーレイ */}
           {weekLoading && (
