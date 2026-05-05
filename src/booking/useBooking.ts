@@ -265,6 +265,8 @@ export function useBooking() {
         body: JSON.stringify({
           date: bookingItem.date,
           time: bookingItem.time,
+          endTime: bookingItem.endTime,
+          menu: bookingItem.menu,
           name: bookingItem.name,
         }),
       });
