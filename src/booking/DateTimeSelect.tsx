@@ -151,7 +151,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
       </div>
 
       {/* グリッド */}
-      <div className="flex-1 overflow-auto pb-28" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
+      <div className="flex-1 overflow-auto pb-40" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'none' }}>
         <div className="relative">
           {/* 読み込み中オーバーレイ */}
           {weekLoading && (
