@@ -78,8 +78,8 @@ function App() {
         <div className="hero-bg hero-bg-2"></div>
         <div className="hero-bg hero-bg-3"></div>
         <div className="hero-overlay"></div>
+        <img src="/images/align-logo.png" alt="Align" className="hero-logo-img" />
         <div className="hero-content fade-in-section is-visible">
-          <img src="/images/align-logo.png" alt="Align" className="hero-logo-img" />
           <div className="hero-badge">
             【オープン記念】全コース1,000円OFFでご体験いただけます
           </div>
