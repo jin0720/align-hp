@@ -264,6 +264,7 @@ nav a:hover {
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  padding-top: 78px;
 }
 
 .hero-bg {
@@ -335,22 +336,24 @@ nav a:hover {
 .hero-content {
   max-width: 620px;
   padding: 0 var(--space-md);
-  margin-top: var(--space-xl);
+}
+
+.hero-center-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 10;
 }
 
 .hero-logo-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, calc(-50% - 300px));
+  display: block;
+  margin: 0 auto 12px;
   min-width: 240px;
   width: 57vw;
   max-width: 540px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
-  z-index: 10;
 }
 
 .hero h1 {

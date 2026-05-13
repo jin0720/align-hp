@@ -78,6 +78,7 @@ function App() {
         <div className="hero-bg hero-bg-2"></div>
         <div className="hero-bg hero-bg-3"></div>
         <div className="hero-overlay"></div>
+        <div className="hero-center-group">
         <img src="/images/align-logo.png" alt="Align" className="hero-logo-img" />
         <div className="hero-content fade-in-section is-visible">
           <div className="hero-badge">
@@ -93,6 +94,7 @@ function App() {
             <span>Scroll</span>
             <div className="scroll-line"></div>
           </div>
+        </div>
         </div>
       </section>
 
