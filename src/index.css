@@ -186,16 +186,18 @@ img {
   backdrop-filter: blur(12px);
   z-index: 1000;
   border-bottom: 1px solid rgba(0,0,0,0.05);
-  padding: 15px 5%;
+  padding: 6px 5%;
+  height: 78px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .header-logo {
-  height: 40px;
+  height: 132px;
   width: auto;
   object-fit: contain;
+  align-self: flex-start;
 }
 
 .logo {
@@ -331,19 +333,22 @@ nav a:hover {
 }
 
 .hero-content {
-  max-width: 900px;
+  max-width: 620px;
   padding: 0 var(--space-md);
   margin-top: var(--space-xl);
   z-index: 10;
 }
 
-.main-logo-text {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3.5rem, 8vw + 1rem, 6rem);
-  color: #FFF; /* Use white for maximum contrast on hero */
-  margin-bottom: var(--space-xl);
-  letter-spacing: 0.1em;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+.hero-logo-img {
+  display: block;
+  margin: 10px auto 8px;
+  min-width: 160px;
+  width: 38vw;
+  max-width: 360px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
+  transform: translateY(100px);
 }
 
 .hero h1 {
