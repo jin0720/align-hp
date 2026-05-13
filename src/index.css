@@ -343,7 +343,7 @@ nav a:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, calc(-50% - 180px));
+  transform: translate(-50%, calc(-50% - 300px));
   min-width: 240px;
   width: 57vw;
   max-width: 540px;
