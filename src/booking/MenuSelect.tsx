@@ -14,13 +14,11 @@ const ALIGN_GREEN = '#557A64';
 const ALIGN_GREEN_DARK = '#3A5A46';
 const ALIGN_GREEN_LIGHT = '#EEF3F0';
 
-const MENU_META: Record<string, { emoji: string; desc: string }> = {
+const MENU_META: Record<string, { desc: string }> = {
   oil: {
-    emoji: '🫧',
     desc: '全身のコリや疲れを癒すオイルトリートメント',
   },
   seitai: {
-    emoji: '🌿',
     desc: '骨格・姿勢を整える本格整体ケア',
   },
 };
@@ -66,8 +64,8 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
       <div className="flex-1 overflow-y-auto pb-32">
         {/* セクションタイトル */}
         <div className="px-4 pt-5 pb-2">
-          <p className="text-xs font-bold tracking-widest" style={{ color: ALIGN_GREEN }}>
-            ★ ディープリラクゼーション ★
+          <p className="text-xs tracking-widest uppercase" style={{ color: ALIGN_GREEN, letterSpacing: '0.12em' }}>
+            Deep Relaxation
           </p>
           <p className="text-xs mt-0.5" style={{ color: '#6A6D6B' }}>
             ご希望のメニューをお選びください
@@ -81,7 +79,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
           ) : (
             menus.map(menu => {
               const isSelected = booking.menu === menu.id;
-              const meta = MENU_META[menu.id] ?? { emoji: '✨', desc: '' };
+              const meta = MENU_META[menu.id] ?? { desc: '' };
               const durations = Object.keys(menu.prices).map(Number);
 
               return (
@@ -89,53 +87,49 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
                   {/* カード本体 */}
                   <button
                     onClick={() => handleMenuClick(menu.id)}
-                    className="w-full text-left rounded-2xl overflow-hidden shadow-sm border-2 transition-all"
+                    className="w-full text-left rounded-2xl overflow-hidden shadow-sm transition-all"
                     style={{
-                      borderColor: isSelected ? ALIGN_GREEN : '#E0EDE6',
+                      border: `1.5px solid ${isSelected ? ALIGN_GREEN : '#E0EDE6'}`,
                       background: '#FFFFFF',
                     }}
                   >
                     <div className="flex items-stretch">
-                      {/* 左：アクセントカラー帯 + 絵文字 */}
+                      {/* 左：アクセントライン */}
                       <div
-                        className="flex items-center justify-center w-24 flex-shrink-0 text-4xl"
+                        className="flex-shrink-0"
                         style={{
-                          background: isSelected
-                            ? `linear-gradient(160deg, ${ALIGN_GREEN} 0%, ${ALIGN_GREEN_DARK} 100%)`
-                            : `linear-gradient(160deg, #C8D9CE 0%, #A8C4B0 100%)`,
-                          minHeight: '108px',
+                          width: '4px',
+                          background: isSelected ? ALIGN_GREEN : '#D4E4DA',
                         }}
-                      >
-                        {meta.emoji}
-                      </div>
+                      />
 
-                      {/* 右：テキスト */}
+                      {/* テキスト */}
                       <div className="flex-1 px-4 py-4">
                         <div className="flex items-start justify-between">
                           <p
-                            className="font-bold text-base leading-snug"
-                            style={{ color: isSelected ? ALIGN_GREEN_DARK : '#333333' }}
+                            className="font-bold text-base leading-snug tracking-wide"
+                            style={{ color: isSelected ? ALIGN_GREEN_DARK : '#1A1A1A' }}
                           >
                             {menu.name}
                           </p>
                           {isSelected ? (
                             <span
-                              className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0 ml-2 mt-0.5"
-                              style={{ background: ALIGN_GREEN }}
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-white flex-shrink-0 ml-2 mt-0.5"
+                              style={{ background: ALIGN_GREEN, fontSize: '10px' }}
                             >
                               ✓
                             </span>
                           ) : (
                             <span
-                              className="w-6 h-6 rounded-full border-2 flex-shrink-0 ml-2 mt-0.5"
+                              className="w-5 h-5 rounded-full border flex-shrink-0 ml-2 mt-0.5"
                               style={{ borderColor: '#C8D9CE' }}
                             />
                           )}
                         </div>
-                        <p className="text-xs mt-1 leading-relaxed" style={{ color: '#6A6D6B' }}>
+                        <p className="text-xs mt-1 leading-relaxed" style={{ color: '#8A9A8E' }}>
                           {meta.desc}
                         </p>
-                        <p className="text-sm font-bold mt-2" style={{ color: ALIGN_GREEN }}>
+                        <p className="text-sm font-semibold mt-2" style={{ color: ALIGN_GREEN }}>
                           {getPriceRange(menu)}
                         </p>
                       </div>
