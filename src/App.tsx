@@ -382,7 +382,7 @@ function App() {
           <div className="fade-in-section">
             <div className="section-header">
               <h2>Salons</h2>
-              <p className="subtitle">施術場所のご案内</p>
+              <p className="subtitle">場所のご案内</p>
             </div>
 
             <div className="salons-container">
@@ -417,19 +417,24 @@ function App() {
                 <div className="salon-card-body">
                   <div className="salon-card-header">
                     <div className="salon-tag">TRAINING</div>
-                    <h3>トレーニング場所</h3>
+                    <h3>トレーニングルーム</h3>
                   </div>
                   <div className="salon-list">
                     <div className="salon-item">
                       <MapPin className="icon-silver" size={18} />
                       <div className="salon-info">
-                        <span className="station">中野 / 新中野 / 西新宿 / 西新宿五丁目</span>
+                        <span className="station">① 中野駅徒歩2分</span>
+                      </div>
+                    </div>
+                    <div className="salon-item">
+                      <MapPin className="icon-silver" size={18} />
+                      <div className="salon-info">
+                        <span className="station">② 中野駅徒歩4分</span>
                       </div>
                     </div>
                   </div>
                   <div className="salon-card-note" style={{display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem', color: '#8c8c8c'}}>
-                    <p>※ご希望の店舗がない場合は「中野」をご案内させていただきます。</p>
-                    <p>※レンタルジムを使用するため、予約状況によりエリアのご希望に添えない場合がございます。</p>
+                    <p>※空き状況により①②いずれかの場所をご案内します。</p>
                   </div>
                 </div>
               </div>

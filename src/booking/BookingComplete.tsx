@@ -6,6 +6,7 @@ interface BookingCompleteProps {
   menus: Menu[];
   onViewHistory: () => void;
   onNewBooking: () => void;
+  isTrial?: boolean;
 }
 
 const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
@@ -36,11 +37,83 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
   menus,
   onViewHistory,
   onNewBooking,
+  isTrial = false,
 }) => {
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const priceInfo = selectedMenu?.prices[booking.duration];
   const endTime = booking.time ? getEndTime(booking.time, booking.duration) : '';
+  const isTraining = booking.menu === 'training';
 
+  // ── トレーニング仮予約受付画面 ────────────────────────────
+  if (isTraining) {
+    return (
+      <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
+        <div className="text-white text-center py-3 font-bold text-base tracking-widest" style={{ background: '#2C5F3F' }}>
+          仮予約受付
+        </div>
+
+        <div className="flex-1 overflow-y-auto pb-36 px-4 pt-6 space-y-5">
+          {/* 受付メッセージ */}
+          <div className="text-center py-4">
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-3"
+              style={{ background: 'linear-gradient(135deg, #D4AF37 0%, #A08020 100%)' }}
+            >
+              ⏳
+            </div>
+            <p className="font-bold text-lg" style={{ color: '#7A6520' }}>
+              仮予約を受け付けました
+            </p>
+            <p className="text-xs mt-1" style={{ color: '#6A6D6B' }}>
+              {isTrial ? '初回体験セッション' : 'パーソナルトレーニング'}
+            </p>
+          </div>
+
+          {/* 予約詳細カード */}
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="py-2.5 text-center text-sm font-bold text-white" style={{ background: '#2C5F3F' }}>
+              ご予約内容
+            </div>
+            <Row label="日付">
+              {formatDate(booking.date)}　{booking.time}〜{endTime}
+            </Row>
+            <Row label="メニュー">
+              {selectedMenu?.name}　{booking.duration}分
+            </Row>
+            {priceInfo && (
+              <Row label="料金（消費税込）">
+                <span className="font-bold" style={{ color: '#2C5F3F' }}>
+                  {isTrial ? '初回 ' : ''}¥{priceInfo.discounted.toLocaleString()}円
+                </span>
+                <span className="text-xs text-gray-500 ml-1">（現地決済）</span>
+              </Row>
+            )}
+          </div>
+
+          {/* 次のステップ説明 */}
+          <div className="rounded-2xl p-4 text-xs leading-relaxed" style={{ background: '#FFF8E7', border: '1px solid #D4AF37', color: '#7A6520' }}>
+            <p className="font-bold mb-2">📋 次のステップ</p>
+            <p>① トレーナーがレンタルジムの空きを確認します</p>
+            <p>② <strong>前日22時まで</strong>にLINEで確定通知をお送りします</p>
+            <p>③ 確定後にジムの場所をご案内します📍</p>
+          </div>
+        </div>
+
+        {/* 下部ボタン */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3 pb-6">
+          <button
+            onClick={onNewBooking}
+            className="w-full py-3 rounded-2xl font-bold text-sm"
+            style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff' }}
+          >
+            トップに戻る
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── 通常予約完了画面 ──────────────────────────────────────
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
       {/* ヘッダー */}

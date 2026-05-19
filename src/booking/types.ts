@@ -34,6 +34,7 @@ export interface Booking {
 export interface BookingSession extends Booking {
   endTime?: string;
   bookingRef?: string;
+  pending?: boolean;
 }
 
 export interface AvailabilityResponse {

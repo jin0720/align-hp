@@ -25,6 +25,7 @@ export const BookingFlow: React.FC = () => {
     bookingHistory,
     loading,
     error,
+    isTrial,
     fetchAvailableSlots,
     fetchWeekAvailability,
     submitBooking,
@@ -34,18 +35,29 @@ export const BookingFlow: React.FC = () => {
   } = useBooking();
 
   // ── URL パラメータによる初期画面遷移 ──────────────────────
-  // リッチメニューから ?view=history で開いた場合に予約確認画面へ直接遷移
   const [initialNavDone, setInitialNavDone] = useState(false);
   useEffect(() => {
     if (!initialNavDone && userProfile) {
-      const view = new URLSearchParams(window.location.search).get('view');
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get('view');
+      const menuParam = params.get('menu');
+      const durationParam = parseInt(params.get('duration') || '0');
+
+      setInitialNavDone(true);
+
       if (view === 'history') {
-        setInitialNavDone(true);
         fetchBookingHistory(userProfile.userId);
         setCurrentStep('history');
+      } else if (menuParam && durationParam) {
+        // menu + duration が揃っている場合は datetime ステップへ直接スキップ
+        updateBooking({ menu: menuParam, duration: durationParam });
+        setCurrentStep('datetime');
+      } else if (menuParam) {
+        // menu だけ指定された場合は menu ステップでそのメニューを選択状態に
+        updateBooking({ menu: menuParam });
       }
     }
-  }, [userProfile, initialNavDone, fetchBookingHistory, setCurrentStep]);
+  }, [userProfile, initialNavDone, fetchBookingHistory, setCurrentStep, updateBooking]);
 
   // ── ステップ遷移ハンドラー ──────────────────────────────
   const handleMenuNext = () => {
@@ -131,6 +143,7 @@ export const BookingFlow: React.FC = () => {
             onBack={() => setCurrentStep('datetime')}
             loading={loading}
             error={error}
+            isTrial={isTrial}
           />
         );
 
@@ -141,6 +154,7 @@ export const BookingFlow: React.FC = () => {
             menus={menus}
             onViewHistory={handleHistory}
             onNewBooking={handleComplete}
+            isTrial={isTrial}
           />
         );
 

@@ -194,10 +194,9 @@ img {
 }
 
 .header-logo {
-  height: 132px;
+  height: 62px;
   width: auto;
   object-fit: contain;
-  align-self: flex-start;
 }
 
 .logo {
@@ -348,9 +347,9 @@ nav a:hover {
 .hero-logo-img {
   display: block;
   margin: 0 auto 12px;
-  min-width: 240px;
+  min-width: 230px;
   width: 57vw;
-  max-width: 540px;
+  max-width: 530px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));

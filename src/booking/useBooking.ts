@@ -42,7 +42,24 @@ const FALLBACK_MENUS: Menu[] = [
       160: { original: 19000, discounted: 18000, label: '160分' },
     },
   },
+  {
+    id: 'training',
+    name: 'パーソナルトレーニング',
+    prices: {
+      60: { original: 10000, discounted: 9000,  label: '60分' },
+      90: { original: 13000, discounted: 12000, label: '90分' },
+    },
+  },
 ];
+
+/** URLパラメータから初期値を読み取る */
+function getInitialParamsFromUrl(): { menu: string; duration: number; isTrial: boolean } {
+  const params = new URLSearchParams(window.location.search);
+  const menu = params.get('menu') || '';
+  const duration = parseInt(params.get('duration') || '0') || 0;
+  const isTrial = params.get('trial') === 'true';
+  return { menu, duration, isTrial };
+}
 
 const toDateString = (date: Date): string => {
   const y = date.getFullYear();
@@ -52,12 +69,17 @@ const toDateString = (date: Date): string => {
 };
 
 export function useBooking() {
+  const urlParams = getInitialParamsFromUrl();
+  const initialMenu = urlParams.menu;
+  const initialDuration = urlParams.duration;
+  const [isTrial] = useState<boolean>(urlParams.isTrial);
+
   const [currentStep, setCurrentStep] = useState<BookingStep>('menu');
   const [booking, setBooking] = useState<BookingSession>({
     date: '',
     time: '',
-    menu: '',
-    duration: 70,
+    menu: initialMenu || '',
+    duration: initialDuration || 70,
     name: '',
     comment: '',
   });
@@ -223,7 +245,7 @@ export function useBooking() {
       }
 
       const bookingRef = 'AL' + Date.now().toString(36).toUpperCase();
-      setBooking(prev => ({ ...prev, endTime: data.booking.endTime, bookingRef }));
+      setBooking(prev => ({ ...prev, endTime: data.booking.endTime, bookingRef, pending: data.pending || false }));
       setCurrentStep('complete');
     } catch (err) {
       console.error('予約APIエラー:', err);
@@ -305,6 +327,10 @@ export function useBooking() {
     });
     setCurrentStep('menu');
     setError(null);
+    // URL パラメータをクリア（ブラウザ履歴を壊さずに）
+    if (window.history.replaceState) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }, [userProfile]);
 
   // ── メニュー初期ロード ──────────────────────────────────
@@ -326,6 +352,7 @@ export function useBooking() {
     bookingHistory,
     loading,
     error,
+    isTrial,
     fetchMenus,
     fetchAvailableSlots,
     fetchWeekAvailability,

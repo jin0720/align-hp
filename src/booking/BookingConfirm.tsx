@@ -9,6 +9,7 @@ interface BookingConfirmProps {
   onBack: () => void;
   loading: boolean;
   error: string | null;
+  isTrial?: boolean;
 }
 
 const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
@@ -46,10 +47,12 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
   onBack,
   loading,
   error,
+  isTrial = false,
 }) => {
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const priceInfo = selectedMenu?.prices[booking.duration];
   const endTime = booking.time ? getEndTime(booking.time, booking.duration) : '';
+  const isTraining = booking.menu === 'training';
 
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
@@ -62,6 +65,13 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm">
             {error}
+          </div>
+        )}
+
+        {/* 体験バッジ（trial=true のとき） */}
+        {isTrial && (
+          <div className="rounded-2xl px-4 py-3 text-center font-bold text-sm" style={{ background: '#2C5F3F', color: '#fff' }}>
+            ✨ 初回体験セッション — 初回限定価格でご利用いただけます！
           </div>
         )}
 
@@ -85,13 +95,21 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
                   </span>
                 )}
                 <span className="text-base font-bold" style={{ color: ALIGN_GREEN_DARK }}>
-                  ¥{priceInfo.discounted.toLocaleString()}円
+                  {isTrial ? '初回' : ''}¥{priceInfo.discounted.toLocaleString()}円
                 </span>
                 <span className="text-xs text-gray-500">（現地決済）</span>
               </div>
             </Row>
           )}
         </div>
+
+        {/* トレーニング注意書き */}
+        {isTraining && (
+          <div className="rounded-2xl p-4 text-xs leading-relaxed" style={{ background: '#FFF8E7', border: '1px solid #D4AF37', color: '#7A6520' }}>
+            <p className="font-bold mb-1">⏳ トレーニング予約について</p>
+            <p>こちらは<strong>仮予約</strong>です。トレーナーがレンタルジムの空きを確認後、前日22時までにLINEでご連絡します。確定後にジムの場所をお知らせします。</p>
+          </div>
+        )}
 
         {/* コメント欄 */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -134,7 +152,7 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
             opacity: loading ? 0.7 : 1,
           }}
         >
-          {loading ? '予約確定中...' : 'この内容で予約する　→'}
+          {loading ? '送信中...' : isTraining ? '仮予約を申し込む　→' : 'この内容で予約する　→'}
         </button>
         <button
           onClick={onBack}

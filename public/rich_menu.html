@@ -97,6 +97,19 @@
       border: 1px solid rgba(223, 205, 159, 0.3);
     }
 
+    /* Training consultation tile */
+    .menu-item.training-consult {
+      background: linear-gradient(145deg, rgba(44, 95, 63, 0.25) 0%, transparent 100%);
+    }
+    .menu-item.training-consult::after {
+      border: 1px solid rgba(100, 200, 130, 0.2);
+    }
+
+    /* Training booking tile */
+    .menu-item.training-book {
+      background: linear-gradient(145deg, rgba(44, 95, 63, 0.15) 0%, transparent 100%);
+    }
+
     .title {
       font-size: 34px;
       font-weight: 600;
@@ -129,19 +142,19 @@
     
     <!-- Top Row -->
     <div class="menu-item reserve">
-      <i data-lucide="mail-check"></i>
-      <div class="title">ご予約</div>
+      <i data-lucide="calendar-check"></i>
+      <div class="title">マッサージ予約</div>
       <div class="subtitle">RESERVATION</div>
     </div>
-    <div class="menu-item">
-      <i data-lucide="calendar-clock"></i>
-      <div class="title">空き状況</div>
-      <div class="subtitle">SCHEDULE</div>
+    <div class="menu-item training-consult">
+      <i data-lucide="dumbbell"></i>
+      <div class="title">トレーニング</div>
+      <div class="subtitle">相談・体験予約</div>
     </div>
-    <div class="menu-item">
-      <i data-lucide="book-open"></i>
-      <div class="title">料金・メニュー</div>
-      <div class="subtitle">PRICE & MENU</div>
+    <div class="menu-item training-book">
+      <i data-lucide="calendar-plus"></i>
+      <div class="title">トレーニング予約</div>
+      <div class="subtitle">TRAINING BOOKING</div>
     </div>
 
     <!-- Bottom Row -->
