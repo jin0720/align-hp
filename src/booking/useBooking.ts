@@ -247,6 +247,14 @@ export function useBooking() {
       const bookingRef = 'AL' + Date.now().toString(36).toUpperCase();
       setBooking(prev => ({ ...prev, endTime: data.booking.endTime, bookingRef, pending: data.pending || false }));
       setCurrentStep('complete');
+
+      try {
+        if (liff.isInClient()) {
+          await liff.sendMessages([{ type: 'text', text: '予約が完了しました。' }]);
+        }
+      } catch (e) {
+        console.warn('liff.sendMessages失敗（予約完了には影響なし）:', e);
+      }
     } catch (err) {
       console.error('予約APIエラー:', err);
       setError('サーバーへの接続に失敗しました。しばらく待ってから再度お試しください。');
