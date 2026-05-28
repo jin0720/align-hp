@@ -432,9 +432,15 @@ function App() {
                         <span className="station">② 中野駅徒歩4分</span>
                       </div>
                     </div>
+                    <div className="salon-item">
+                      <MapPin className="icon-silver" size={18} />
+                      <div className="salon-info">
+                        <span className="station">③ 中野坂上駅徒歩4分</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="salon-card-note" style={{display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem', color: '#8c8c8c'}}>
-                    <p>※空き状況により①②いずれかの場所をご案内します。</p>
+                    <p>※空き状況により①②③いずれかの場所をご案内します。</p>
                   </div>
                 </div>
               </div>
