@@ -252,8 +252,13 @@ export function useBooking() {
         if (liff.isInClient()) {
           await liff.sendMessages([{ type: 'text', text: '予約が完了しました。' }]);
         }
-      } catch (e) {
-        console.warn('liff.sendMessages失敗（予約完了には影響なし）:', e);
+      } catch (e: any) {
+        console.warn('liff.sendMessages失敗:', e);
+        fetch(`${API_BASE}/api/log`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ event: 'sendMessages_error', error: e?.message || String(e) }),
+        }).catch(() => {});
       }
     } catch (err) {
       console.error('予約APIエラー:', err);
