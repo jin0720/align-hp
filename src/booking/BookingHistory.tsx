@@ -70,48 +70,67 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
         ) : (
           <div className="space-y-3">
             <h2 className="text-sm font-bold text-gray-800 mb-3">現在の予約</h2>
-            {history.map(booking => (
-              <div
-                key={booking.rowIndex}
-                className="bg-white rounded-lg p-4 shadow-sm"
-                style={{ borderLeft: `4px solid ${BRAND}` }}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <p className="text-sm font-bold text-gray-800 mb-1">
-                      {formatDate(booking.date)}（{formatTime(booking.date, booking.time)}）
-                    </p>
-                    <p className="text-xs text-gray-600">
-                      {booking.time} ～ {booking.endTime}
-                    </p>
-                  </div>
-                  <span className="px-2 py-1 rounded text-xs font-semibold text-white" style={{ backgroundColor: BRAND }}>
-                    確定
-                  </span>
-                </div>
-
-                <div className="bg-gray-50 rounded p-3 mb-3 space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600">メニュー</span>
-                    <span className="text-gray-800 font-semibold">{booking.menu}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600">時間</span>
-                    <span className="text-gray-800 font-semibold">{booking.duration}分</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => onCancel(booking.rowIndex, booking)}
-                  className={classnames(
-                    'w-full py-2 rounded text-sm font-semibold transition',
-                    'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  )}
+            {history.map(booking => {
+              const isPending = booking.status === '仮予約';
+              const borderColor = isPending ? '#B8860B' : BRAND;
+              return (
+                <div
+                  key={`${booking.isTraining ? 'tr' : 'ms'}-${booking.rowIndex}`}
+                  className="bg-white rounded-lg p-4 shadow-sm"
+                  style={{ borderLeft: `4px solid ${borderColor}` }}
                 >
-                  予約の変更・キャンセル
-                </button>
-              </div>
-            ))}
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <p className="text-sm font-bold text-gray-800 mb-1">
+                        {formatDate(booking.date)}（{formatTime(booking.date, booking.time)}）
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        {booking.time} ～ {booking.endTime}
+                      </p>
+                    </div>
+                    <span
+                      className="px-2 py-1 rounded text-xs font-semibold text-white"
+                      style={{ backgroundColor: isPending ? '#B8860B' : BRAND }}
+                    >
+                      {isPending ? '確定待ち' : '確定'}
+                    </span>
+                  </div>
+
+                  <div className="bg-gray-50 rounded p-3 mb-3 space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">メニュー</span>
+                      <span className="text-gray-800 font-semibold">{booking.menu}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">時間</span>
+                      <span className="text-gray-800 font-semibold">{booking.duration}分</span>
+                    </div>
+                    {booking.isTraining && booking.goals && (
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-600">目標</span>
+                        <span className="text-gray-800 font-semibold text-right max-w-[60%]">{booking.goals}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {booking.isTraining ? (
+                    <p className="text-xs text-center text-gray-400">
+                      {isPending ? 'トレーナーが確認次第、確定通知をお送りします' : 'キャンセルはLINEにてトレーナーにご連絡ください'}
+                    </p>
+                  ) : (
+                    <button
+                      onClick={() => onCancel(booking.rowIndex, booking)}
+                      className={classnames(
+                        'w-full py-2 rounded text-sm font-semibold transition',
+                        'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      )}
+                    >
+                      予約の変更・キャンセル
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

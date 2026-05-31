@@ -53,6 +53,8 @@ export interface BookingHistory {
   name: string;
   userId: string;
   status: string;
+  isTraining?: boolean;
+  goals?: string;
 }
 
 export interface BookingContextType {

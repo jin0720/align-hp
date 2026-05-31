@@ -256,18 +256,27 @@ export function useBooking() {
     }
   }, [booking, userProfile]);
 
-  // ── 予約履歴を取得 ──────────────────────────────────────
+  // ── 予約履歴を取得（マッサージ・整体 + トレーニング） ──────────
   const fetchBookingHistory = useCallback(async (userId: string) => {
     setLoading(true);
     setError(null);
     try {
       const params = new URLSearchParams({ userId });
-      const res = await fetchWithTimeout(`${API_BASE}/api/bookings?${params}`);
+      const [regularRes, trainingRes] = await Promise.all([
+        fetchWithTimeout(`${API_BASE}/api/bookings?${params}`),
+        fetchWithTimeout(`${API_BASE}/api/training-bookings?${params}`),
+      ]);
 
-      if (!res.ok) throw new Error('予約履歴の取得に失敗しました');
+      const regularData = regularRes.ok ? await regularRes.json() : { bookings: [] };
+      const trainingData = trainingRes.ok ? await trainingRes.json() : { bookings: [] };
 
-      const data = await res.json();
-      setBookingHistory(data.bookings || []);
+      const regularBookings = (regularData.bookings || []).map((b: any) => ({ ...b, isTraining: false }));
+      const trainingBookings = (trainingData.bookings || []).map((b: any) => ({ ...b, isTraining: true }));
+
+      const allBookings = [...regularBookings, ...trainingBookings].sort((a, b) =>
+        `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`)
+      );
+      setBookingHistory(allBookings);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'エラーが発生しました';
       setError(message);
