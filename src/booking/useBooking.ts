@@ -248,18 +248,6 @@ export function useBooking() {
       setBooking(prev => ({ ...prev, endTime: data.booking.endTime, bookingRef, pending: data.pending || false }));
       setCurrentStep('complete');
 
-      try {
-        if (liff.isInClient()) {
-          await liff.sendMessages([{ type: 'text', text: '予約が完了しました。' }]);
-        }
-      } catch (e: any) {
-        console.warn('liff.sendMessages失敗:', e);
-        fetch(`${API_BASE}/api/log`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ event: 'sendMessages_error', error: e?.message || String(e) }),
-        }).catch(() => {});
-      }
     } catch (err) {
       console.error('予約APIエラー:', err);
       setError('サーバーへの接続に失敗しました。しばらく待ってから再度お試しください。');
