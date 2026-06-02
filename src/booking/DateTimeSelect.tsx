@@ -2,7 +2,7 @@
  * DateTimeSelect.tsx - 週グリッド形式の日時選択
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { BookingSession, Menu } from './types';
 
 interface DateTimeSelectProps {
@@ -23,17 +23,6 @@ interface DateTimeSelectProps {
 const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 const WEEKDAY_COLORS = ['text-red-500', 'text-gray-700', 'text-gray-700', 'text-gray-700', 'text-gray-700', 'text-gray-700', 'text-blue-500'];
 
-// 10:00〜22:30を30分刻みで生成
-const TIME_SLOTS: string[] = (() => {
-  const slots: string[] = [];
-  for (let h = 10; h <= 22; h++) {
-    for (const m of [0, 30]) {
-      if (h === 22 && m === 30) break;
-      slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
-    }
-  }
-  return slots;
-})();
 
 const toDateString = (date: Date): string => {
   const y = date.getFullYear();
@@ -74,6 +63,20 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
 
   const maxDate = new Date(today);
   maxDate.setMonth(maxDate.getMonth() + 3);
+
+  const timeSlots = useMemo(() => {
+    const times = new Set<string>();
+    for (let h = 10; h <= 22; h++) {
+      for (const m of [0, 30]) {
+        if (h === 22 && m === 30) break;
+        times.add(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+      }
+    }
+    Object.values(weekAvailability).forEach(slots => {
+      slots.forEach(t => times.add(t));
+    });
+    return Array.from(times).sort();
+  }, [weekAvailability]);
 
   const isDisabled = (date: Date): boolean => date < today || date > maxDate;
 
@@ -192,7 +195,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
               </tr>
             </thead>
             <tbody>
-              {TIME_SLOTS.map(time => (
+              {timeSlots.map(time => (
                 <tr key={time} className="border-b border-gray-100">
                   {/* 時間ラベル */}
                   <td className="border-r border-gray-200 py-2 text-xs text-gray-600 font-medium bg-white" style={{ fontSize: '11px' }}>
