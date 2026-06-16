@@ -134,7 +134,7 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                   ) : (
                     <p className="text-xs text-center text-red-500">
                       ※前日23時を過ぎているため、キャンセルできません。<br />
-                      変更はLINEにてご連絡ください。
+                      LINEにてご連絡ください。
                     </p>
                   )}
                 </div>
