@@ -139,6 +139,15 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
 
       {/* 下部ボタン */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3 pb-6 space-y-2">
+        {/* キャンセルポリシー（マッサージのみ） */}
+        {!isTraining && (
+          <div className="rounded-xl px-4 py-3 text-xs leading-relaxed"
+               style={{ background: '#FFF0F0', border: '1px solid #FFAAAA', color: '#C0392B' }}>
+            <p className="font-bold mb-1">⚠️ キャンセルポリシー</p>
+            <p>前日23時まで：<strong>無料</strong></p>
+            <p>当日キャンセル：<strong>料金の100%をいただきます</strong></p>
+          </div>
+        )}
         <button
           onClick={onConfirm}
           disabled={loading}

@@ -73,6 +73,10 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
             {history.map(booking => {
               const isPending = booking.status === '仮予約';
               const borderColor = isPending ? '#B8860B' : BRAND;
+              const [cy, cm, cd] = booking.date.split('-').map(Number);
+              const cancelDeadline = new Date(cy, cm - 1, cd - 1);
+              cancelDeadline.setHours(23, 0, 0, 0);
+              const canCancel = new Date() < cancelDeadline;
               return (
                 <div
                   key={`${booking.isTraining ? 'tr' : 'ms'}-${booking.rowIndex}`}
@@ -117,7 +121,7 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                     <p className="text-xs text-center text-gray-400">
                       {isPending ? 'トレーナーが確認次第、確定通知をお送りします' : 'キャンセルはLINEにてトレーナーにご連絡ください'}
                     </p>
-                  ) : (
+                  ) : canCancel ? (
                     <button
                       onClick={() => onCancel(booking.rowIndex, booking)}
                       className={classnames(
@@ -127,6 +131,11 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                     >
                       予約の変更・キャンセル
                     </button>
+                  ) : (
+                    <p className="text-xs text-center text-red-500">
+                      ※前日23時を過ぎているため、キャンセルできません。<br />
+                      変更はLINEにてご連絡ください。
+                    </p>
                   )}
                 </div>
               );
