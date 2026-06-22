@@ -148,11 +148,12 @@ export function useBooking() {
   }, []);
 
   // ── 利用可能スロット取得（単一日） ────────────────────
-  const fetchAvailableSlots = useCallback(async (date: string, duration: number) => {
+  const fetchAvailableSlots = useCallback(async (date: string, duration: number, menu?: string) => {
     setLoading(true);
     setError(null);
     try {
       const params = new URLSearchParams({ date, duration: String(duration) });
+      if (menu) params.set('menu', menu);
       const res = await fetchWithTimeout(`${API_BASE}/api/availability?${params}`);
 
       if (!res.ok) throw new Error('利用可能時間の取得に失敗しました');
@@ -169,7 +170,7 @@ export function useBooking() {
   }, []);
 
   // ── 週単位の利用可能スロット取得 ──────────────────────
-  const fetchWeekAvailability = useCallback(async (weekStart: string, duration: number) => {
+  const fetchWeekAvailability = useCallback(async (weekStart: string, duration: number, menu?: string) => {
     setWeekLoading(true);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -189,6 +190,7 @@ export function useBooking() {
 
       const dateStr = toDateString(date);
       const params = new URLSearchParams({ date: dateStr, duration: String(duration) });
+      if (menu) params.set('menu', menu);
       return fetchWithTimeout(`${API_BASE}/api/availability?${params}`, undefined, 6000)
         .then(async res => {
           if (!res.ok) return { dateStr, slots: [] as string[] };

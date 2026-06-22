@@ -2,7 +2,7 @@
  * BookingFlow.tsx - 予約フロー全体管理（ルーティング＆状態遷移）
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useBooking } from './useBooking';
 import { MenuSelect } from './MenuSelect';
 import { DateTimeSelect } from './DateTimeSelect';
@@ -33,6 +33,15 @@ export const BookingFlow: React.FC = () => {
     cancelBooking,
     resetBooking,
   } = useBooking();
+
+  const fetchSlotsWithMenu = useCallback(
+    (date: string, duration: number) => fetchAvailableSlots(date, duration, booking.menu),
+    [fetchAvailableSlots, booking.menu]
+  );
+  const fetchWeekWithMenu = useCallback(
+    (weekStart: string, duration: number) => fetchWeekAvailability(weekStart, duration, booking.menu),
+    [fetchWeekAvailability, booking.menu]
+  );
 
   // ── URL パラメータによる初期画面遷移 ──────────────────────
   const [initialNavDone, setInitialNavDone] = useState(false);
@@ -126,8 +135,8 @@ export const BookingFlow: React.FC = () => {
             onDateSelect={(date) => updateBooking({ date })}
             onTimeSelect={(time) => updateBooking({ time })}
             onNext={handleDateTimeNext}
-            onFetchSlots={fetchAvailableSlots}
-            onFetchWeekAvailability={fetchWeekAvailability}
+            onFetchSlots={fetchSlotsWithMenu}
+            onFetchWeekAvailability={fetchWeekWithMenu}
             onBack={() => setCurrentStep('menu')}
             loading={loading}
           />
