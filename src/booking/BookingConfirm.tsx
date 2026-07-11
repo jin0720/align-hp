@@ -52,7 +52,7 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const priceInfo = selectedMenu?.prices[booking.duration];
   const endTime = booking.time ? getEndTime(booking.time, booking.duration) : '';
-  const isTraining = booking.menu === 'training';
+  const isTraining = booking.menu.startsWith('training');
 
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>

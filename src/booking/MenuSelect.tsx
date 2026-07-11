@@ -47,6 +47,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
     const prices = Object.values(menu.prices);
     const min = Math.min(...prices.map(p => p.discounted));
     const max = Math.max(...prices.map(p => p.discounted));
+    if (min === max) return `¥${min.toLocaleString()}`;
     return `¥${min.toLocaleString()} 〜 ¥${max.toLocaleString()}`;
   };
 
@@ -161,12 +162,14 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
                               }}
                             >
                               <p className="font-bold text-sm">{price.label}</p>
-                              <p
-                                className="text-xs mt-0.5"
-                                style={{ color: isSelectedDur ? 'rgba(255,255,255,0.75)' : '#6A6D6B' }}
-                              >
-                                <span className="line-through">¥{price.original.toLocaleString()}</span>
-                              </p>
+                              {price.original !== price.discounted && (
+                                <p
+                                  className="text-xs mt-0.5"
+                                  style={{ color: isSelectedDur ? 'rgba(255,255,255,0.75)' : '#6A6D6B' }}
+                                >
+                                  <span className="line-through">¥{price.original.toLocaleString()}</span>
+                                </p>
+                              )}
                               <p className="font-bold text-base">
                                 ¥{price.discounted.toLocaleString()}
                               </p>

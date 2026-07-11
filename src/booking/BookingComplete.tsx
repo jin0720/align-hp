@@ -42,7 +42,7 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const priceInfo = selectedMenu?.prices[booking.duration];
   const endTime = booking.time ? getEndTime(booking.time, booking.duration) : '';
-  const isTraining = booking.menu === 'training';
+  const isTraining = booking.menu.startsWith('training');
 
   // ── トレーニング仮予約受付画面 ────────────────────────────
   if (isTraining) {
@@ -65,7 +65,7 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
               仮予約を受け付けました
             </p>
             <p className="text-xs mt-1" style={{ color: '#6A6D6B' }}>
-              {isTrial ? '初回体験セッション' : 'パーソナルトレーニング'}
+              {isTrial ? '初回体験セッション' : (selectedMenu?.name ?? 'パーソナルトレーニング')}
             </p>
           </div>
 

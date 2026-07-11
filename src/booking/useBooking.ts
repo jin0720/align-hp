@@ -50,6 +50,13 @@ const FALLBACK_MENUS: Menu[] = [
       90: { original: 13000, discounted: 12000, label: '90分' },
     },
   },
+  {
+    id: 'training_early',
+    name: '早朝パーソナル',
+    prices: {
+      50: { original: 7000, discounted: 7000, label: '50分' },
+    },
+  },
 ];
 
 /** URLパラメータから初期値を読み取る */
