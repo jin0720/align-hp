@@ -1,21 +1,9 @@
 import { useEffect, useState } from 'react';
-import { MessageCircle, Calendar, Clock, User, CheckCircle, Heart, Activity, ArrowRight, MapPin, Menu, X } from 'lucide-react';
+import { MessageCircle, Clock, User, CheckCircle, Heart, Activity, MapPin, Menu, X } from 'lucide-react';
 import { BookingFlow } from './booking';
 
-// キャンペーン割引（1,000円OFF）終了日時。この日時（JST）以降は自動的に通常料金表示になる
-const CAMPAIGN_END = new Date('2026-08-01T00:00:00+09:00');
-const isCampaignActive = () => new Date() < CAMPAIGN_END;
-
-function PriceDisplay({ original, discounted }: { original: number; discounted: number }) {
-  if (!isCampaignActive()) {
-    return <span className="price-amount">¥{original.toLocaleString()}</span>;
-  }
-  return (
-    <>
-      <span className="price-original">通常 ¥{original.toLocaleString()}</span>
-      <span className="price-amount"><span className="price-first-time">初回</span>¥{discounted.toLocaleString()}</span>
-    </>
-  );
+function PriceDisplay({ original }: { original: number }) {
+  return <span className="price-amount">¥{original.toLocaleString()}</span>;
 }
 
 function App() {
@@ -79,13 +67,12 @@ function App() {
           <ul>
             <li><a href="#concept" onClick={(e) => { e.preventDefault(); scrollTo('concept'); }}>コンセプト</a></li>
             <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollTo('about'); }}>特徴</a></li>
-            <li><a href="#schedule" onClick={(e) => { e.preventDefault(); scrollTo('schedule'); }}>空き状況</a></li>
             <li><a href="#price" onClick={(e) => { e.preventDefault(); scrollTo('price'); }}>料金案内</a></li>
             <li><a href="#profile" onClick={(e) => { e.preventDefault(); scrollTo('profile'); }}>プロフィール</a></li>
 
             <li><a href="#access" onClick={(e) => { e.preventDefault(); scrollTo('access'); }}>アクセス</a></li>
           </ul>
-          <a href="#contact" className="nav-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>オープン記念割引1000円OFFで予約</a>
+          <a href="#contact" className="nav-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>ご予約はこちら</a>
         </nav>
       </header>
 
@@ -97,9 +84,6 @@ function App() {
         <div className="hero-center-group">
         <img src="/images/align-logo.png" alt="Align" className="hero-logo-img" />
         <div className="hero-content fade-in-section is-visible">
-          <div className="hero-badge">
-            【オープン記念】全コース1,000円OFFでご体験いただけます
-          </div>
           <p className="hero-catchphrase">
             <span className="inline-block">身体をリセットし、明日を創る。</span>
           </p>
@@ -124,10 +108,10 @@ function App() {
             
             <div className="concept-wrapper">
               <div className="concept-images-grid">
-                <img src="/images/new/IMG_1227.jpg" alt="Concept 1" className="concept-img-main rounded-img shadow-lg filter-dark" />
+                <img src="/images/new/IMG_1227.jpg" alt="Concept 1" className="concept-img-main rounded-img shadow-lg filter-dark" loading="lazy" />
                 <div className="concept-img-sub-row">
-                  <img src="/images/new/IMG_2228.jpg" alt="Concept 2" className="rounded-img shadow-lg filter-dark" />
-                  <img src="/images/new/IMG_2250.jpg" alt="Concept 3" className="rounded-img shadow-lg filter-dark" />
+                  <img src="/images/new/IMG_2228.jpg" alt="Concept 2" className="rounded-img shadow-lg filter-dark" loading="lazy" />
+                  <img src="/images/new/IMG_2250.jpg" alt="Concept 3" className="rounded-img shadow-lg filter-dark" loading="lazy" />
                 </div>
               </div>
               <div className="concept-text">
@@ -192,41 +176,6 @@ function App() {
         </div>
       </section>
 
-      <section id="schedule" className="section-padding dark-section">
-        <div className="container">
-          <div className="fade-in-section">
-            <div className="section-header">
-              <h2>Schedule</h2>
-              <p className="subtitle">空き状況</p>
-            </div>
-            <div className="schedule-card-dark">
-              <p className="schedule-info text-light-on-dark">
-                <Calendar className="icon-inline" size={20}/> <span className="inline-block">空き状況は、</span><span className="inline-block">随時カレンダーにて</span><span className="inline-block">ご案内しております。</span><br className="pc-only"/>
-                <span className="inline-block">当日の急なご予約希望や</span><span className="inline-block">お時間のご相談も、</span><span className="inline-block">お気軽にお問い合わせください。</span>
-              </p>
-              <div className="calendar-wrapper">
-                {/* Overlay text for Google Calendar on dark mode if needed, but wrapper is white */}
-                <iframe 
-                  src="https://calendar.google.com/calendar/embed?src=92fbb73c5378971eb16e07f64a7a68726f1ef9b4242cfd6996b94037acaa1c09%40group.calendar.google.com&color=%238C7A6B&ctz=Asia%2FTokyo&showTitle=0&showNav=1&showDate=1&showTabs=0&showCalendars=0" 
-                  style={{ border: "0" }} 
-                  width="100%" 
-                  height="100%" 
-                  frameBorder="0" 
-                  scrolling="no"
-                  title="空き状況カレンダー"
-                ></iframe>
-              </div>
-              <div className="cal-notice text-center mt-5">
-                <p className="text-light-on-dark mb-4">お問い合わせ・ご予約は公式LINEから承ります</p>
-                <a href="https://line.me/R/ti/p/@782majcy?ts=04242132&oat_content=url" target="_blank" rel="noopener noreferrer" className="btn-gold">
-                  LINEで予約する <ArrowRight size={16} className="icon-inline" style={{marginLeft: '5px'}}/>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="price" className="section-padding light-section">
         <div className="container">
           <div className="fade-in-section">
@@ -248,7 +197,7 @@ function App() {
                       <span className="course-name">全身の緊張をゆるめ、心身ともに深くリラックス</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={10000} discounted={9000} />
+                      <PriceDisplay original={10000} />
                     </div>
                   </div>
                   <div className="price-item recommended">
@@ -258,7 +207,7 @@ function App() {
                       <span className="course-name">圧倒的な密着感で、日々のコリや疲れを丁寧に癒やす（人気No.1）</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={13000} discounted={12000} />
+                      <PriceDisplay original={13000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -267,7 +216,7 @@ function App() {
                       <span className="course-name">贅沢なロングコースで、全身が解きほぐされる至福のとき</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={16000} discounted={15000} />
+                      <PriceDisplay original={16000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -276,7 +225,7 @@ function App() {
                       <span className="course-name">溜まりきった疲れも、時間をかけて徹底的にリフレッシュ</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={19000} discounted={18000} />
+                      <PriceDisplay original={19000} />
                     </div>
                   </div>
                 </div>
@@ -294,7 +243,7 @@ function App() {
                       <span className="course-name">基礎体力の向上からボディメイクまで</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={10000} discounted={9000} />
+                      <PriceDisplay original={10000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -303,7 +252,7 @@ function App() {
                       <span className="course-name">しっかり追い込みたい方・じっくりフォームを学びたい方へ</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={13000} discounted={12000} />
+                      <PriceDisplay original={13000} />
                     </div>
                   </div>
                 </div>
@@ -331,10 +280,10 @@ function App() {
             
             <div className="profile-wrapper-lux">
               <div className="profile-img-col">
-                <img src="/images/new/IMG_1491.jpg" alt="ジュン" className="profile-main-img" />
+                <img src="/images/new/IMG_1491.jpg" alt="ジュン" className="profile-main-img" loading="lazy" />
                 <div className="profile-sub-images">
-                   <img src="/images/new/IMG_9750 2.JPG" alt="Gallery 1" />
-                   <img src="/images/new/IMG_1525.JPG" alt="Gallery 2" />
+                   <img src="/images/new/IMG_9750 2.JPG" alt="Gallery 1" loading="lazy" />
+                   <img src="/images/new/IMG_1525.JPG" alt="Gallery 2" loading="lazy" />
                 </div>
               </div>
               
@@ -399,7 +348,7 @@ function App() {
               {/* Treatment Salon */}
               <div className="salon-card">
                 <div className="salon-image-wrap">
-                  <img src="/images/new/IMG_2243.jpg" alt="Treatment space" />
+                  <img src="/images/new/IMG_2243.jpg" alt="Treatment space" loading="lazy" />
                 </div>
                 <div className="salon-card-body">
                   <div className="salon-card-header">
@@ -422,7 +371,7 @@ function App() {
               {/* Training Gym */}
               <div className="salon-card silver">
                 <div className="salon-image-wrap">
-                  <img src="/images/new/IMG_2250.jpg" alt="Training space" />
+                  <img src="/images/new/IMG_2250.jpg" alt="Training space" loading="lazy" />
                 </div>
                 <div className="salon-card-body">
                   <div className="salon-card-header">
@@ -472,13 +421,12 @@ function App() {
                 <p className="contact-text">
                   <span className="inline-block">当サロンは完全予約制の</span><span className="inline-block">プライベート空間です。</span><br/>
                   <span className="inline-block">ご予約やスケジュールのご相談、</span><span className="inline-block">空き状況の確認などがございましたら、</span><br/>
-                  <span className="inline-block">公式LINEよりお気軽にご連絡ください。</span><br/><br/>
-                  <small className="inline-block">※施術中はご返信が遅れる場合がございますが、</small><small className="inline-block">必ず折り返しご連絡いたします。</small>
+                  <span className="inline-block">公式LINEよりお気軽にご連絡ください。</span>
                 </p>
                 
                 <a href="https://lin.ee/uYY4SNW" target="_blank" rel="noopener noreferrer" className="line-btn-lux">
                   <MessageCircle size={24} />
-                  オープン記念割引1000円OFF｜LINEで予約する
+                  LINEで予約する
                 </a>
               </div>
             </div>
