@@ -2,6 +2,22 @@ import { useEffect, useState } from 'react';
 import { MessageCircle, Calendar, Clock, User, CheckCircle, Heart, Activity, ArrowRight, MapPin, Menu, X } from 'lucide-react';
 import { BookingFlow } from './booking';
 
+// キャンペーン割引（1,000円OFF）終了日時。この日時（JST）以降は自動的に通常料金表示になる
+const CAMPAIGN_END = new Date('2026-08-01T00:00:00+09:00');
+const isCampaignActive = () => new Date() < CAMPAIGN_END;
+
+function PriceDisplay({ original, discounted }: { original: number; discounted: number }) {
+  if (!isCampaignActive()) {
+    return <span className="price-amount">¥{original.toLocaleString()}</span>;
+  }
+  return (
+    <>
+      <span className="price-original">通常 ¥{original.toLocaleString()}</span>
+      <span className="price-amount"><span className="price-first-time">初回</span>¥{discounted.toLocaleString()}</span>
+    </>
+  );
+}
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
@@ -232,8 +248,7 @@ function App() {
                       <span className="course-name">全身の緊張をゆるめ、心身ともに深くリラックス</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <span className="price-original">通常 ¥10,000</span>
-                      <span className="price-amount"><span className="price-first-time">初回</span>¥9,000</span>
+                      <PriceDisplay original={10000} discounted={9000} />
                     </div>
                   </div>
                   <div className="price-item recommended">
@@ -243,8 +258,7 @@ function App() {
                       <span className="course-name">圧倒的な密着感で、日々のコリや疲れを丁寧に癒やす（人気No.1）</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <span className="price-original">通常 ¥13,000</span>
-                      <span className="price-amount"><span className="price-first-time">初回</span>¥12,000</span>
+                      <PriceDisplay original={13000} discounted={12000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -253,8 +267,7 @@ function App() {
                       <span className="course-name">贅沢なロングコースで、全身が解きほぐされる至福のとき</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <span className="price-original">通常 ¥16,000</span>
-                      <span className="price-amount"><span className="price-first-time">初回</span>¥15,000</span>
+                      <PriceDisplay original={16000} discounted={15000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -263,8 +276,7 @@ function App() {
                       <span className="course-name">溜まりきった疲れも、時間をかけて徹底的にリフレッシュ</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <span className="price-original">通常 ¥19,000</span>
-                      <span className="price-amount"><span className="price-first-time">初回</span>¥18,000</span>
+                      <PriceDisplay original={19000} discounted={18000} />
                     </div>
                   </div>
                 </div>
@@ -282,8 +294,7 @@ function App() {
                       <span className="course-name">基礎体力の向上からボディメイクまで</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <span className="price-original">通常 ¥10,000</span>
-                      <span className="price-amount"><span className="price-first-time">初回</span>¥9,000</span>
+                      <PriceDisplay original={10000} discounted={9000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -292,8 +303,7 @@ function App() {
                       <span className="course-name">しっかり追い込みたい方・じっくりフォームを学びたい方へ</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <span className="price-original">通常 ¥13,000</span>
-                      <span className="price-amount"><span className="price-first-time">初回</span>¥12,000</span>
+                      <PriceDisplay original={13000} discounted={12000} />
                     </div>
                   </div>
                 </div>

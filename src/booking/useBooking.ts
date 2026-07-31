@@ -21,40 +21,50 @@ const fetchWithTimeout = (url: string, options?: RequestInit, ms = 5000): Promis
 };
 
 
+// キャンペーン割引（1,000円OFF）終了日時。この日時（JST）以降は discounted === original になる
+const CAMPAIGN_END = new Date('2026-08-01T00:00:00+09:00');
+const isCampaignActive = () => new Date() < CAMPAIGN_END;
+
+const campaignPrice = (original: number, discounted: number, label: string) => ({
+  original,
+  discounted: isCampaignActive() ? discounted : original,
+  label,
+});
+
 const FALLBACK_MENUS: Menu[] = [
   {
     id: 'oil',
     name: 'オイルマッサージ',
     prices: {
-      70:  { original: 10000, discounted: 9000,  label: '70分' },
-      100: { original: 13000, discounted: 12000, label: '100分' },
-      130: { original: 16000, discounted: 15000, label: '130分' },
-      160: { original: 19000, discounted: 18000, label: '160分' },
+      70:  campaignPrice(10000, 9000,  '70分'),
+      100: campaignPrice(13000, 12000, '100分'),
+      130: campaignPrice(16000, 15000, '130分'),
+      160: campaignPrice(19000, 18000, '160分'),
     },
   },
   {
     id: 'seitai',
     name: '整体',
     prices: {
-      70:  { original: 10000, discounted: 9000,  label: '70分' },
-      100: { original: 13000, discounted: 12000, label: '100分' },
-      130: { original: 16000, discounted: 15000, label: '130分' },
-      160: { original: 19000, discounted: 18000, label: '160分' },
+      70:  campaignPrice(10000, 9000,  '70分'),
+      100: campaignPrice(13000, 12000, '100分'),
+      130: campaignPrice(16000, 15000, '130分'),
+      160: campaignPrice(19000, 18000, '160分'),
     },
   },
   {
     id: 'training',
     name: 'パーソナルトレーニング',
     prices: {
-      60: { original: 10000, discounted: 9000,  label: '60分' },
-      90: { original: 13000, discounted: 12000, label: '90分' },
+      60: campaignPrice(10000, 9000,  '60分'),
+      90: campaignPrice(13000, 12000, '90分'),
     },
   },
   {
     id: 'training_early',
     name: '早朝パーソナル',
     prices: {
-      50: { original: 7000, discounted: 7000, label: '50分' },
+      50: campaignPrice(7000, 7000, '50分'),
     },
   },
 ];
