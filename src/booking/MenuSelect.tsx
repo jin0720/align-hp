@@ -21,6 +21,15 @@ const MENU_META: Record<string, { desc: string }> = {
   seitai: {
     desc: '骨格・姿勢を整える本格整体ケア',
   },
+  oil_first: {
+    desc: '初めてのお客様限定！全身のコリや疲れを癒すオイルトリートメント',
+  },
+  seitai_first: {
+    desc: '初めてのお客様限定！骨格・姿勢を整える本格整体ケア',
+  },
+  training_first: {
+    desc: '初めてのお客様限定のパーソナルトレーニング',
+  },
 };
 
 export const MenuSelect: React.FC<MenuSelectProps> = ({

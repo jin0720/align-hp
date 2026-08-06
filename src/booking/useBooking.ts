@@ -67,6 +67,34 @@ const FALLBACK_MENUS: Menu[] = [
       50: campaignPrice(7000, 7000, '50分'),
     },
   },
+  {
+    id: 'oil_first',
+    name: '初回オイルマッサージ(1000円OFF)',
+    prices: {
+      70:  { original: 10000, discounted: 9000,  label: '70分' },
+      100: { original: 13000, discounted: 12000, label: '100分' },
+      130: { original: 16000, discounted: 15000, label: '130分' },
+      160: { original: 19000, discounted: 18000, label: '160分' },
+    },
+  },
+  {
+    id: 'seitai_first',
+    name: '初回整体(1000円OFF)',
+    prices: {
+      70:  { original: 10000, discounted: 9000,  label: '70分' },
+      100: { original: 13000, discounted: 12000, label: '100分' },
+      130: { original: 16000, discounted: 15000, label: '130分' },
+      160: { original: 19000, discounted: 18000, label: '160分' },
+    },
+  },
+  {
+    id: 'training_first',
+    name: '初回パーソナルトレーニング(1000円OFF)',
+    prices: {
+      60: { original: 10000, discounted: 9000,  label: '60分' },
+      90: { original: 13000, discounted: 12000, label: '90分' },
+    },
+  },
 ];
 
 /** URLパラメータから初期値を読み取る */
