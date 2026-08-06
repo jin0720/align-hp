@@ -22,7 +22,7 @@ const MENU_META: Record<string, { desc: string }> = {
     desc: '骨格・姿勢を整える本格整体ケア',
   },
   oil_first: {
-    desc: '初めてのお客様限定！全身のコリや疲れを癒すオイルトリートメント',
+    desc: '初めての方限定のオイルトリートメント',
   },
   seitai_first: {
     desc: '初めてのお客様限定！骨格・姿勢を整える本格整体ケア',
