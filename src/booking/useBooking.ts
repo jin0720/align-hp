@@ -62,7 +62,7 @@ const FALLBACK_MENUS: Menu[] = [
   },
   {
     id: 'training_early',
-    name: '早朝パーソナル',
+    name: '早朝パーソナル(6時〜9時スタート)',
     prices: {
       50: campaignPrice(7000, 7000, '50分'),
       80: campaignPrice(10000, 10000, '80分'),
