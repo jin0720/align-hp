@@ -65,6 +65,7 @@ const FALLBACK_MENUS: Menu[] = [
     name: '早朝パーソナル',
     prices: {
       50: campaignPrice(7000, 7000, '50分'),
+      80: campaignPrice(10000, 10000, '80分'),
     },
   },
   {
