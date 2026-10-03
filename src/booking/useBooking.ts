@@ -296,13 +296,29 @@ export function useBooking() {
       setBooking(prev => ({ ...prev, endTime: data.booking.endTime, bookingRef, pending: data.pending || false }));
       setCurrentStep('complete');
 
+      // 公式アカウントのチャット履歴を残すため、お客様名義で予約内容を自動送信する
+      // （LIFFをトーク画面から開いた場合のみ有効。失敗しても予約には影響させない）
+      try {
+        if (liff.isInClient()) {
+          const menuName = menus.find(m => m.id === booking.menu)?.name ?? booking.menu;
+          const [y, mo, d] = booking.date.split('-').map(Number);
+          const dow = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, mo - 1, d).getDay()];
+          await liff.sendMessages([{
+            type: 'text',
+            text: `【予約完了】\n${menuName}（${booking.duration}分）\n${mo}月${d}日（${dow}）${booking.time}〜${data.booking.endTime}\n${bookingData.name}`,
+          }]);
+        }
+      } catch (sendErr) {
+        console.warn('LIFF sendMessages 失敗（予約は完了済み）:', sendErr);
+      }
+
     } catch (err) {
       console.error('予約APIエラー:', err);
       setError('サーバーへの接続に失敗しました。しばらく待ってから再度お試しください。');
     } finally {
       setLoading(false);
     }
-  }, [booking, userProfile]);
+  }, [booking, userProfile, menus]);
 
   // ── 予約履歴を取得（マッサージ・整体 + トレーニング） ──────────
   const fetchBookingHistory = useCallback(async (userId: string) => {
