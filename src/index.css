@@ -749,6 +749,15 @@ nav a:hover {
   margin-bottom: -5px;
 }
 
+.category-offer {
+  text-align: center;
+  font-size: var(--fz-sm);
+  color: var(--primary-color);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  margin: calc(-1 * var(--space-md)) 0 var(--space-xl);
+}
+
 .price-first-time {
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 0.85rem;

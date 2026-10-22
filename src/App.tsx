@@ -189,6 +189,7 @@ function App() {
               <div className="menu-category">
                 <h3 className="category-title">Deep Relaxation</h3>
                 <p className="category-desc">深層筋ストレッチ＆リラクゼーションマッサージ</p>
+                <p className="category-offer">LINEからのご予約で割引中</p>
                 
                 <div className="price-card elegant-card">
                   <div className="price-item">
@@ -235,6 +236,7 @@ function App() {
               <div className="menu-category">
                 <h3 className="category-title">Personal Training</h3>
                 <p className="category-desc">一人ひとりの目標に合わせたマンツーマン指導</p>
+                <p className="category-offer">初回限定 2,000円OFF</p>
                 
                 <div className="price-card elegant-card">
                   <div className="price-item">
