@@ -90,10 +90,10 @@ const FALLBACK_MENUS: Menu[] = [
   },
   {
     id: 'training_first',
-    name: '初回パーソナルトレーニング(1000円OFF)',
+    name: '初回パーソナルトレーニング(2000円OFF)',
     prices: {
-      60: { original: 10000, discounted: 9000,  label: '60分' },
-      90: { original: 13000, discounted: 12000, label: '90分' },
+      60: { original: 10000, discounted: 8000,  label: '60分' },
+      90: { original: 13000, discounted: 11000, label: '90分' },
     },
   },
 ];
