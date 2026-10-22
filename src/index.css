@@ -253,6 +253,30 @@ nav a:hover {
   color: var(--bg-darker);
 }
 
+/* Language toggle */
+.lang-toggle {
+  display: inline-flex;
+  margin-left: 16px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.lang-toggle button {
+  background: transparent;
+  color: var(--primary-color);
+  border: none;
+  padding: 7px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+.lang-toggle button.is-active {
+  background-color: var(--primary-color);
+  color: var(--bg-darker);
+}
+
 /* Hero */
 .hero {
   position: relative;
@@ -1066,6 +1090,12 @@ nav a:hover {
   line-height: 2;
 }
 
+.contact-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .line-btn-lux {
   display: inline-flex;
   align-items: center;
@@ -1091,8 +1121,33 @@ nav a:hover {
   box-shadow: 0 10px 30px rgba(6, 199, 85, 0.3);
 }
 
+.ig-btn-lux {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #f09433 0%, #dc2743 50%, #bc1888 100%);
+  color: white;
+  padding: 18px 25px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  gap: 10px;
+  transition: all 0.3s;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.ig-btn-lux:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(220, 39, 67, 0.3);
+}
+
 @media (max-width: 480px) {
-  .line-btn-lux {
+  .line-btn-lux,
+  .ig-btn-lux {
     font-size: 0.85rem;
     padding: 15px 15px;
     gap: 6px;
@@ -1304,6 +1359,10 @@ nav a:hover {
     font-size: 1rem;
     display: block;
     padding: 10px 0;
+  }
+
+  .header-nav .lang-toggle {
+    margin: 16px auto 0;
   }
 
   .header-nav .nav-reserve-btn {
