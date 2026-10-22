@@ -207,7 +207,7 @@ function App() {
                       <span className="course-name">圧倒的な密着感で、日々のコリや疲れを丁寧に癒やす（人気No.1）</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={13000} />
+                      <PriceDisplay original={14000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -216,7 +216,7 @@ function App() {
                       <span className="course-name">贅沢なロングコースで、全身が解きほぐされる至福のとき</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={16000} />
+                      <PriceDisplay original={18000} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -225,7 +225,7 @@ function App() {
                       <span className="course-name">溜まりきった疲れも、時間をかけて徹底的にリフレッシュ</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={19000} />
+                      <PriceDisplay original={21000} />
                     </div>
                   </div>
                 </div>
