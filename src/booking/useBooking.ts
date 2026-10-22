@@ -4,6 +4,8 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import liff from '@line/liff';
+import { useLang } from '../i18n/LanguageContext';
+import { useBookingText } from '../i18n/useBookingText';
 import type {
   BookingStep,
   BookingSession,
@@ -114,7 +116,12 @@ const toDateString = (date: Date): string => {
   return `${y}-${m}-${d}`;
 };
 
+// 開発サーバーで ?mock=1 を付けると LIFF ログインを省いて画面確認できる (本番ビルドでは無効)
+const isMockPreview = () => import.meta.env.DEV && new URLSearchParams(window.location.search).get('mock') === '1';
+
 export function useBooking() {
+  const { lang, suggestLang } = useLang();
+  const { tb, menuName } = useBookingText();
   const urlParams = getInitialParamsFromUrl();
   const initialMenu = urlParams.menu;
   const initialDuration = urlParams.duration;
@@ -145,8 +152,18 @@ export function useBooking() {
       const liffId = import.meta.env.VITE_LINE_LIFF_ID || '2009962690-j5dQBfYL';
       setLiffStatus('init中');
 
+      if (isMockPreview()) {
+        setUserProfile({ userId: 'demo-preview', name: 'Preview Guest' });
+        setBooking(prev => ({ ...prev, name: prev.name || 'Preview Guest' }));
+        setLiffStatus('MOCK');
+        return;
+      }
+
       try {
         await liff.init({ liffId, withLoginOnExternalBrowser: true });
+
+        // LINEアプリの言語に合わせる（切替ボタンやURLでの指定があればそちらを優先）
+        suggestLang(liff.getLanguage().toLowerCase().startsWith('ja') ? 'ja' : 'en');
 
         if (!liff.isLoggedIn()) {
           console.warn('LIFF: 未ログイン → LINE ログインにリダイレクト');
@@ -169,11 +186,12 @@ export function useBooking() {
         const msg = err?.message || String(err);
         console.error('LIFF セットアップエラー:', msg);
         setLiffStatus(`ERR:${msg.slice(0, 30)}`);
-        setError(`LINE連携エラー: ${msg} — LINEアプリから開き直してください`);
+        setError(tb.err.liff(msg));
       }
     };
 
     initLiff();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── メニュー取得 ──────────────────────────────────────
@@ -181,8 +199,8 @@ export function useBooking() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetchWithTimeout(`${API_BASE}/api/menus`);
-      if (!res.ok) throw new Error('メニュー取得に失敗しました');
+      const res = await fetchWithTimeout(`${API_BASE}/api/menus?lang=${lang}`);
+      if (!res.ok) throw new Error('menus request failed');
       const data = await res.json();
       setMenus(data);
     } catch (err) {
@@ -191,29 +209,29 @@ export function useBooking() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [lang]);
 
   // ── 利用可能スロット取得（単一日） ────────────────────
   const fetchAvailableSlots = useCallback(async (date: string, duration: number, menu?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ date, duration: String(duration) });
+      const params = new URLSearchParams({ date, duration: String(duration), lang });
       if (menu) params.set('menu', menu);
       const res = await fetchWithTimeout(`${API_BASE}/api/availability?${params}`);
 
-      if (!res.ok) throw new Error('利用可能時間の取得に失敗しました');
+      if (!res.ok) throw new Error(tb.err.availabilityFailed);
 
       const data: AvailabilityResponse = await res.json();
       setAvailableSlots(data.slots);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'エラーが発生しました';
+      const message = err instanceof Error ? err.message : tb.err.unknown;
       setError(message);
       console.error('スロット取得エラー:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [lang, tb]);
 
   // ── 週単位の利用可能スロット取得 ──────────────────────
   const fetchWeekAvailability = useCallback(async (weekStart: string, duration: number, menu?: string) => {
@@ -260,7 +278,7 @@ export function useBooking() {
   // ── 予約を送信 ──────────────────────────────────────────
   const submitBooking = useCallback(async () => {
     if (!userProfile) {
-      setError('LINEアプリ内から開いてください（LIFF未初期化）');
+      setError(tb.err.notInLine);
       return;
     }
 
@@ -271,7 +289,18 @@ export function useBooking() {
         ...booking,
         userId: userProfile.userId,
         name: booking.name || userProfile.name,
+        lang,
       };
+
+      // 画面確認用 (?mock=1): 予約は作成せず、完了画面だけ表示する
+      if (isMockPreview()) {
+        const [h, m] = booking.time.split(':').map(Number);
+        const end = h * 60 + m + booking.duration;
+        const endTime = `${String(Math.floor(end / 60)).padStart(2, '0')}:${String(end % 60).padStart(2, '0')}`;
+        setBooking(prev => ({ ...prev, endTime, bookingRef: 'ALPREVIEW', pending: booking.menu.startsWith('training') }));
+        setCurrentStep('complete');
+        return;
+      }
 
       const res = await fetchWithTimeout(`${API_BASE}/api/bookings`, {
         method: 'POST',
@@ -282,14 +311,14 @@ export function useBooking() {
       const data = await res.json();
 
       if (res.status === 409) {
-        setError(data.message || 'この時間は埋まってしまいました');
+        setError(data.message || tb.err.slotTaken);
         setAvailableSlots(data.availableSlots || []);
         setCurrentStep('datetime');
         return;
       }
 
       if (!res.ok) {
-        throw new Error(data.error || '予約に失敗しました');
+        throw new Error(data.error || tb.err.bookingFailed);
       }
 
       const bookingRef = 'AL' + Date.now().toString(36).toUpperCase();
@@ -300,12 +329,21 @@ export function useBooking() {
       // （LIFFをトーク画面から開いた場合のみ有効。失敗しても予約には影響させない）
       try {
         if (liff.isInClient()) {
-          const menuName = menus.find(m => m.id === booking.menu)?.name ?? booking.menu;
+          const menu = menus.find(m => m.id === booking.menu);
           const [y, mo, d] = booking.date.split('-').map(Number);
-          const dow = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, mo - 1, d).getDay()];
+          const dow = tb.datetime.weekdays[new Date(y, mo - 1, d).getDay()];
           await liff.sendMessages([{
             type: 'text',
-            text: `【予約完了】\n${menuName}（${booking.duration}分）\n${mo}月${d}日（${dow}）${booking.time}〜${data.booking.endTime}\n${bookingData.name}`,
+            text: tb.chatMessage({
+              menuName: menu ? menuName(menu.id, menu.name) : booking.menu,
+              duration: tb.duration(booking.duration),
+              m: mo,
+              d,
+              wd: dow,
+              time: booking.time,
+              endTime: data.booking.endTime,
+              name: bookingData.name,
+            }),
           }]);
         }
       } catch (sendErr) {
@@ -314,18 +352,18 @@ export function useBooking() {
 
     } catch (err) {
       console.error('予約APIエラー:', err);
-      setError('サーバーへの接続に失敗しました。しばらく待ってから再度お試しください。');
+      setError(tb.err.connection);
     } finally {
       setLoading(false);
     }
-  }, [booking, userProfile, menus]);
+  }, [booking, userProfile, menus, lang, tb, menuName]);
 
   // ── 予約履歴を取得（マッサージ・整体 + トレーニング） ──────────
   const fetchBookingHistory = useCallback(async (userId: string) => {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ userId });
+      const params = new URLSearchParams({ userId, lang });
       const [regularRes, trainingRes] = await Promise.all([
         fetchWithTimeout(`${API_BASE}/api/bookings?${params}`),
         fetchWithTimeout(`${API_BASE}/api/training-bookings?${params}`),
@@ -342,13 +380,13 @@ export function useBooking() {
       );
       setBookingHistory(allBookings);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'エラーが発生しました';
+      const message = err instanceof Error ? err.message : tb.err.unknown;
       setError(message);
       console.error('予約履歴取得エラー:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [lang, tb]);
 
   // ── 予約をキャンセル ────────────────────────────────────
   const cancelBooking = useCallback(async (rowIndex: number, bookingItem: BookingHistory) => {
@@ -365,24 +403,25 @@ export function useBooking() {
           menu: bookingItem.menu,
           duration: bookingItem.duration,
           name: bookingItem.name,
+          lang,
         }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || 'キャンセルに失敗しました');
+      if (!res.ok) throw new Error(data.error || tb.err.cancelFailed);
 
       if (userProfile) {
         await fetchBookingHistory(userProfile.userId);
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'エラーが発生しました';
+      const message = err instanceof Error ? err.message : tb.err.unknown;
       setError(message);
       console.error('キャンセルエラー:', err);
     } finally {
       setLoading(false);
     }
-  }, [userProfile, fetchBookingHistory]);
+  }, [userProfile, fetchBookingHistory, lang, tb]);
 
   // ── 予約情報を更新 ──────────────────────────────────────
   const updateBooking = useCallback((data: Partial<BookingSession>) => {

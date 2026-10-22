@@ -10,8 +10,10 @@ import { BookingConfirm } from './BookingConfirm';
 import { BookingComplete } from './BookingComplete';
 import { BookingHistory } from './BookingHistory';
 import { StepIndicator } from './StepIndicator';
+import { useBookingText } from '../i18n/useBookingText';
 
 export const BookingFlow: React.FC = () => {
+  const { tb } = useBookingText();
   const {
     currentStep,
     setCurrentStep,
@@ -102,7 +104,7 @@ export const BookingFlow: React.FC = () => {
   };
 
   const handleCancelBooking = async (rowIndex: number, bookingItem: any) => {
-    if (window.confirm('本当にこの予約をキャンセルしてもよろしいですか？')) {
+    if (window.confirm(tb.history.confirmCancel)) {
       await cancelBooking(rowIndex, bookingItem);
     }
   };

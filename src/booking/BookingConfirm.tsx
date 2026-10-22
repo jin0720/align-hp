@@ -1,5 +1,7 @@
 import React from 'react';
 import type { BookingSession, Menu } from './types';
+import { useBookingText } from '../i18n/useBookingText';
+import { LangToggle } from './LangToggle';
 
 interface BookingConfirmProps {
   booking: BookingSession;
@@ -12,24 +14,13 @@ interface BookingConfirmProps {
   isTrial?: boolean;
 }
 
-const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 const ALIGN_GREEN = '#557A64';
 const ALIGN_GREEN_DARK = '#3A5A46';
-
-function getDayOfWeek(dateStr: string): string {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  return WEEKDAYS[new Date(year, month - 1, day).getDay()];
-}
 
 function getEndTime(startTime: string, duration: number): string {
   const [h, m] = startTime.split(':').map(Number);
   const total = h * 60 + m + duration;
   return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
-}
-
-function formatDate(dateStr: string): string {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return `${y}年${m}月${d}日（${getDayOfWeek(dateStr)}）`;
 }
 
 const Row: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
@@ -49,6 +40,11 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
   error,
   isTrial = false,
 }) => {
+  const { tb, menuName } = useBookingText();
+  const formatDate = (dateStr: string): string => {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return tb.longDate(y, m, d, tb.datetime.weekdays[new Date(y, m - 1, d).getDay()]);
+  };
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const priceInfo = selectedMenu?.prices[booking.duration];
   const endTime = booking.time ? getEndTime(booking.time, booking.duration) : '';
@@ -57,8 +53,9 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
       {/* ヘッダー */}
-      <div className="text-white text-center py-3 font-bold text-base tracking-widest" style={{ background: ALIGN_GREEN }}>
-        ご予約内容の確認
+      <div className="relative text-white text-center py-3 font-bold text-base tracking-widest" style={{ background: ALIGN_GREEN }}>
+        {tb.confirm.header}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2"><LangToggle /></div>
       </div>
 
       <div className="flex-1 overflow-y-auto pb-36 px-4 pt-5 space-y-4">
@@ -71,23 +68,23 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
         {/* 体験バッジ（trial=true のとき） */}
         {isTrial && (
           <div className="rounded-2xl px-4 py-3 text-center font-bold text-sm" style={{ background: '#2C5F3F', color: '#fff' }}>
-            ✨ 初回体験セッション — 初回限定価格でご利用いただけます！
+            {tb.confirm.trialBadge}
           </div>
         )}
 
         {/* 予約内容カード */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="py-2.5 text-center text-sm font-bold text-white" style={{ background: ALIGN_GREEN_DARK }}>
-            ご予約内容
+            {tb.confirm.cardTitle}
           </div>
-          <Row label="日付">
-            {formatDate(booking.date)}　{booking.time}〜{endTime}
+          <Row label={tb.confirm.date}>
+            {tb.dateTime(formatDate(booking.date), booking.time, endTime)}
           </Row>
-          <Row label="メニュー">
-            {selectedMenu?.name}　{booking.duration}分
+          <Row label={tb.confirm.menu}>
+            {tb.confirm.menuLine(selectedMenu ? menuName(selectedMenu.id, selectedMenu.name) : '', tb.duration(booking.duration))}
           </Row>
           {priceInfo && (
-            <Row label="合計（消費税込）">
+            <Row label={tb.confirm.total}>
               <div className="flex items-baseline gap-2">
                 {priceInfo.original !== priceInfo.discounted && (
                   <span className="text-xs text-gray-400 line-through">
@@ -95,9 +92,9 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
                   </span>
                 )}
                 <span className="text-base font-bold" style={{ color: ALIGN_GREEN_DARK }}>
-                  {isTrial ? '初回' : ''}¥{priceInfo.discounted.toLocaleString()}円
+                  {isTrial ? tb.confirm.first : ''}¥{priceInfo.discounted.toLocaleString()}{tb.yenSuffix}
                 </span>
-                <span className="text-xs text-gray-500">（現地決済）</span>
+                <span className="text-xs text-gray-500">{tb.confirm.payOnsite}</span>
               </div>
             </Row>
           )}
@@ -106,26 +103,26 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
         {/* トレーニング注意書き */}
         {isTraining && (
           <div className="rounded-2xl p-4 text-xs leading-relaxed" style={{ background: '#FFF8E7', border: '1px solid #D4AF37', color: '#7A6520' }}>
-            <p className="font-bold mb-1">⏳ トレーニング予約について</p>
-            <p>こちらは<strong>仮予約</strong>です。トレーナーがレンタルジムの空きを確認後、前日22時までにLINEでご連絡します。確定後にジムの場所をお知らせします。</p>
+            <p className="font-bold mb-1">{tb.confirm.trainingTitle}</p>
+            <p>{tb.confirm.trainingBefore}<strong>{tb.confirm.trainingStrong}</strong>{tb.confirm.trainingAfter}</p>
           </div>
         )}
 
         {/* コメント欄 */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="py-2.5 text-center text-sm font-bold text-white" style={{ background: ALIGN_GREEN_DARK }}>
-            その他ご要望
+            {tb.confirm.commentTitle}
           </div>
           <div className="px-4 py-4">
             <p className="text-xs leading-relaxed mb-3" style={{ color: '#6A6D6B' }}>
-              ご予約時間の5分前からご来店可能です。<br />
-              その他ご要望がありましたらコメントをご入力ください。<br />
-              ※コメントへの返信は行っておりません。
+              {tb.confirm.commentLines.map((line, i) => (
+                <React.Fragment key={i}>{i > 0 && <br />}{line}</React.Fragment>
+              ))}
             </p>
             <textarea
               value={booking.comment || ''}
               onChange={e => onCommentChange(e.target.value)}
-              placeholder="コメントを入力（任意）"
+              placeholder={tb.confirm.commentPlaceholder}
               rows={3}
               className="w-full rounded-xl px-3 py-2 text-sm resize-none focus:outline-none"
               style={{
@@ -143,9 +140,9 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
         {!isTraining && (
           <div className="rounded-xl px-4 py-3 text-xs leading-relaxed"
                style={{ background: '#FFF0F0', border: '1px solid #FFAAAA', color: '#C0392B' }}>
-            <p className="font-bold mb-1">⚠️ キャンセルポリシー</p>
-            <p>前日23時まで：<strong>無料</strong></p>
-            <p>当日キャンセル：<strong>料金の100%をいただきます</strong></p>
+            <p className="font-bold mb-1">{tb.confirm.policyTitle}</p>
+            <p>{tb.confirm.policyFreeBefore}<strong>{tb.confirm.policyFreeStrong}</strong></p>
+            <p>{tb.confirm.policyFullBefore}<strong>{tb.confirm.policyFullStrong}</strong></p>
           </div>
         )}
         <button
@@ -161,7 +158,7 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
             opacity: loading ? 0.7 : 1,
           }}
         >
-          {loading ? '送信中...' : isTraining ? '仮予約を申し込む　→' : 'この内容で予約する　→'}
+          {loading ? tb.confirm.sending : isTraining ? tb.confirm.submitTraining : tb.confirm.submit}
         </button>
         <button
           onClick={onBack}
@@ -169,7 +166,7 @@ export const BookingConfirm: React.FC<BookingConfirmProps> = ({
           className="w-full py-3 rounded-2xl font-bold text-sm"
           style={{ color: ALIGN_GREEN, border: `1.5px solid #C8D9CE`, background: '#fff' }}
         >
-          修正する
+          {tb.confirm.edit}
         </button>
       </div>
     </div>

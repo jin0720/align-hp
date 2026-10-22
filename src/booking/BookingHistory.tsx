@@ -5,6 +5,8 @@
 import React from 'react';
 import type { BookingHistory as BookingHistoryItem } from './types';
 import classnames from 'classnames';
+import { useBookingText } from '../i18n/useBookingText';
+import { LangToggle } from './LangToggle';
 
 const BRAND = '#557A64';
 
@@ -25,16 +27,12 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
   onCancel,
   onNewBooking,
 }) => {
-  const formatDate = (dateStr: string): string => {
-    const [year, month, day] = dateStr.split('-').map(Number);
-    return `${year}年${month}月${day}日`;
-  };
+  const { tb, sheetMenuName, goals } = useBookingText();
 
-  const formatTime = (dateStr: string, timeStr: string): string => {
+  const formatHeading = (dateStr: string, timeStr: string): string => {
     const [year, month, day] = dateStr.split('-').map(Number);
     const date = new Date(year, month - 1, day);
-    const days = ['日', '月', '火', '水', '木', '金', '土'];
-    return `${days[date.getDay()]} ${timeStr}`;
+    return tb.history.heading(year, month, day, tb.history.weekdays[date.getDay()], timeStr);
   };
 
   return (
@@ -42,8 +40,8 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
       {/* Header */}
       <div className="text-white px-4 py-3 flex items-center justify-between sticky top-0" style={{ backgroundColor: BRAND }}>
         <button onClick={onBack} className="text-xl">←</button>
-        <h1 className="text-sm font-bold">予約履歴</h1>
-        <div className="w-6" />
+        <h1 className="text-sm font-bold">{tb.history.header}</h1>
+        <LangToggle />
       </div>
 
       {/* Content */}
@@ -55,21 +53,21 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
         )}
 
         {loading ? (
-          <div className="text-center text-gray-600 py-6">読み込み中...</div>
+          <div className="text-center text-gray-600 py-6">{tb.history.loading}</div>
         ) : history.length === 0 ? (
           <div className="text-center text-gray-600 py-8">
-            <p className="mb-4">予約履歴はありません</p>
+            <p className="mb-4">{tb.history.empty}</p>
             <button
               onClick={onNewBooking}
               className="text-white px-4 py-2 rounded transition"
               style={{ backgroundColor: BRAND }}
             >
-              新規予約
+              {tb.history.newBooking}
             </button>
           </div>
         ) : (
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-gray-800 mb-3">現在の予約</h2>
+            <h2 className="text-sm font-bold text-gray-800 mb-3">{tb.history.current}</h2>
             {history.map(booking => {
               const isPending = booking.status === '仮予約';
               const borderColor = isPending ? '#B8860B' : BRAND;
@@ -86,40 +84,40 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <p className="text-sm font-bold text-gray-800 mb-1">
-                        {formatDate(booking.date)}（{formatTime(booking.date, booking.time)}）
+                        {formatHeading(booking.date, booking.time)}
                       </p>
                       <p className="text-xs text-gray-600">
-                        {booking.time} ～ {booking.endTime}
+                        {tb.history.timeRange(booking.time, booking.endTime)}
                       </p>
                     </div>
                     <span
                       className="px-2 py-1 rounded text-xs font-semibold text-white"
                       style={{ backgroundColor: isPending ? '#B8860B' : BRAND }}
                     >
-                      {isPending ? '確定待ち' : '確定'}
+                      {isPending ? tb.history.pending : tb.history.confirmed}
                     </span>
                   </div>
 
                   <div className="bg-gray-50 rounded p-3 mb-3 space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-600">メニュー</span>
-                      <span className="text-gray-800 font-semibold">{booking.menu}</span>
+                      <span className="text-gray-600">{tb.history.menu}</span>
+                      <span className="text-gray-800 font-semibold">{sheetMenuName(booking.menu)}</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-600">時間</span>
-                      <span className="text-gray-800 font-semibold">{booking.duration}分</span>
+                      <span className="text-gray-600">{tb.history.duration}</span>
+                      <span className="text-gray-800 font-semibold">{tb.duration(booking.duration)}</span>
                     </div>
                     {booking.isTraining && booking.goals && (
                       <div className="flex justify-between text-xs">
-                        <span className="text-gray-600">目標</span>
-                        <span className="text-gray-800 font-semibold text-right max-w-[60%]">{booking.goals}</span>
+                        <span className="text-gray-600">{tb.history.goals}</span>
+                        <span className="text-gray-800 font-semibold text-right max-w-[60%]">{goals(booking.goals)}</span>
                       </div>
                     )}
                   </div>
 
                   {booking.isTraining ? (
                     <p className="text-xs text-center text-gray-400">
-                      {isPending ? 'トレーナーが確認次第、確定通知をお送りします' : 'キャンセルはLINEにてトレーナーにご連絡ください'}
+                      {isPending ? tb.history.trainingPending : tb.history.trainingConfirmed}
                     </p>
                   ) : canCancel ? (
                     <button
@@ -129,12 +127,12 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                         'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       )}
                     >
-                      予約の変更・キャンセル
+                      {tb.history.changeCancel}
                     </button>
                   ) : (
                     <p className="text-xs text-center text-red-500">
-                      ※前日23時を過ぎているため、キャンセルできません。<br />
-                      LINEにてご連絡ください。
+                      {tb.history.pastDeadlineLines[0]}<br />
+                      {tb.history.pastDeadlineLines[1]}
                     </p>
                   )}
                 </div>
@@ -151,7 +149,7 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
           className="w-full py-3 rounded font-bold text-white transition"
           style={{ backgroundColor: BRAND }}
         >
-          新規予約
+          {tb.history.newBooking}
         </button>
       </div>
     </div>

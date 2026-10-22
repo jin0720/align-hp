@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { BookingSession, Menu } from './types';
+import { useBookingText } from '../i18n/useBookingText';
 
 interface DateTimeSelectProps {
   booking: BookingSession;
@@ -20,7 +21,6 @@ interface DateTimeSelectProps {
   menus?: Menu[];
 }
 
-const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 const WEEKDAY_COLORS = ['text-red-500', 'text-gray-700', 'text-gray-700', 'text-gray-700', 'text-gray-700', 'text-gray-700', 'text-blue-500'];
 
 
@@ -46,6 +46,8 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
   onFetchWeekAvailability,
   onBack,
 }) => {
+  const { tb } = useBookingText();
+  const WEEKDAYS = tb.datetime.weekdays;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -128,10 +130,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
   // 月表示（週をまたぐ場合は "YYYY年MM月〜MM月"）
   const firstDay = weekDays[0];
   const lastDay = weekDays[6];
-  const monthLabel =
-    firstDay.getMonth() === lastDay.getMonth()
-      ? `${firstDay.getFullYear()}年${String(firstDay.getMonth() + 1).padStart(2, '0')}月`
-      : `${firstDay.getFullYear()}年${String(firstDay.getMonth() + 1).padStart(2, '0')}月〜${String(lastDay.getMonth() + 1).padStart(2, '0')}月`;
+  const monthLabel = tb.datetime.monthLabel(firstDay.getFullYear(), firstDay.getMonth() + 1, lastDay.getMonth() + 1);
 
   const canGoPrev = new Date(weekStart).setDate(weekStart.getDate() - 7) >= today.getTime();
 
@@ -145,11 +144,11 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
           style={{ color: canGoPrev ? '#557A64' : '#C8C8C8' }}
           className={canGoPrev ? '' : 'cursor-not-allowed'}
         >
-          前の一週間
+          {tb.datetime.prevWeek}
         </button>
         <span className="text-gray-600 text-xs">{monthLabel}</span>
         <button onClick={handleNextWeek} style={{ color: '#557A64' }}>
-          次の一週間
+          {tb.datetime.nextWeek}
         </button>
       </div>
 
@@ -159,7 +158,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
           {/* 読み込み中オーバーレイ */}
           {weekLoading && (
             <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center z-10">
-              <span className="text-gray-500 text-sm">読み込み中...</span>
+              <span className="text-gray-500 text-sm">{tb.datetime.loading}</span>
             </div>
           )}
 
@@ -168,7 +167,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
               <tr className="bg-white border-b border-gray-200">
                 {/* 時間列ヘッダー */}
                 <th className="border-r border-gray-200 py-2 text-xs text-gray-500 font-normal" style={{ width: '46px' }}>
-                  日時
+                  {tb.datetime.dateHeader}
                 </th>
                 {weekDays.map((date, i) => {
                   const disabled = isDisabled(date);
@@ -250,16 +249,16 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3 pb-6">
         {booking.date && booking.time ? (
           <div className="flex items-center gap-2 mb-3 px-1">
-            <span className="text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0" style={{ background: '#557A64' }}>選択中</span>
+            <span className="text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0" style={{ background: '#557A64' }}>{tb.datetime.selected}</span>
             <span className="text-sm font-bold" style={{ color: '#3A5A46' }}>
               {(() => {
                 const d = parseDate(booking.date);
-                return `${d.getMonth() + 1}/${d.getDate()}（${WEEKDAYS[d.getDay()]}）${booking.time}〜`;
+                return tb.datetime.selectedValue(d.getMonth() + 1, d.getDate(), WEEKDAYS[d.getDay()], booking.time);
               })()}
             </span>
           </div>
         ) : (
-          <p className="text-xs text-center mb-3" style={{ color: '#9E9E9E' }}>日時を選択してください</p>
+          <p className="text-xs text-center mb-3" style={{ color: '#9E9E9E' }}>{tb.datetime.pick}</p>
         )}
         <div className="flex gap-2">
           <button
@@ -267,7 +266,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
             className="w-1/4 rounded-2xl border text-sm font-bold"
             style={{ height: '56px', borderColor: '#C8D9CE', color: '#557A64' }}
           >
-            戻る
+            {tb.datetime.back}
           </button>
           <button
             onClick={onNext}
@@ -281,7 +280,7 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
               opacity: booking.date && booking.time ? 1 : 0.7,
             }}
           >
-            次へ　→
+            {tb.datetime.next}
           </button>
         </div>
       </div>

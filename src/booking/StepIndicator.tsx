@@ -1,16 +1,10 @@
 import React from 'react';
 import type { BookingStep } from './types';
+import { useBookingText } from '../i18n/useBookingText';
 
 interface StepIndicatorProps {
   currentStep: BookingStep;
 }
-
-const STEPS: { key: BookingStep; label: string }[] = [
-  { key: 'menu', label: 'メニュー' },
-  { key: 'datetime', label: '日時選択' },
-  { key: 'confirm', label: '予約内容確認' },
-  { key: 'complete', label: 'ご予約完了' },
-];
 
 const STEP_ORDER: BookingStep[] = ['menu', 'datetime', 'confirm', 'complete'];
 
@@ -18,6 +12,13 @@ const ALIGN_GREEN = '#557A64';
 const ALIGN_GREEN_DONE = '#7A9E8E';
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
+  const { tb } = useBookingText();
+  const STEPS: { key: BookingStep; label: string }[] = [
+    { key: 'menu', label: tb.steps.menu },
+    { key: 'datetime', label: tb.steps.datetime },
+    { key: 'confirm', label: tb.steps.confirm },
+    { key: 'complete', label: tb.steps.complete },
+  ];
   const currentIndex = STEP_ORDER.indexOf(currentStep);
 
   return (

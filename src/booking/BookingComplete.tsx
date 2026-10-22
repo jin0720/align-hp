@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BookingSession, Menu } from './types';
+import { useBookingText } from '../i18n/useBookingText';
 
 interface BookingCompleteProps {
   booking: BookingSession;
@@ -9,15 +10,8 @@ interface BookingCompleteProps {
   isTrial?: boolean;
 }
 
-const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 const ALIGN_GREEN = '#557A64';
 const ALIGN_GREEN_DARK = '#3A5A46';
-
-function formatDate(dateStr: string): string {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const dow = WEEKDAYS[new Date(y, m - 1, d).getDay()];
-  return `${y}年${m}月${d}日（${dow}）`;
-}
 
 function getEndTime(startTime: string, duration: number): string {
   const [h, min] = startTime.split(':').map(Number);
@@ -39,6 +33,11 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
   onNewBooking,
   isTrial = false,
 }) => {
+  const { tb, menuName } = useBookingText();
+  const formatDate = (dateStr: string): string => {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return tb.longDate(y, m, d, tb.datetime.weekdays[new Date(y, m - 1, d).getDay()]);
+  };
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const priceInfo = selectedMenu?.prices[booking.duration];
   const endTime = booking.time ? getEndTime(booking.time, booking.duration) : '';
@@ -49,7 +48,7 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
     return (
       <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
         <div className="text-white text-center py-3 font-bold text-base tracking-widest" style={{ background: '#2C5F3F' }}>
-          仮予約受付
+          {tb.complete.pendingHeader}
         </div>
 
         <div className="flex-1 overflow-y-auto pb-36 px-4 pt-6 space-y-5">
@@ -62,40 +61,40 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
               ⏳
             </div>
             <p className="font-bold text-lg" style={{ color: '#7A6520' }}>
-              仮予約を受け付けました
+              {tb.complete.pendingTitle}
             </p>
             <p className="text-xs mt-1" style={{ color: '#6A6D6B' }}>
-              {isTrial ? '初回体験セッション' : (selectedMenu?.name ?? 'パーソナルトレーニング')}
+              {isTrial ? tb.complete.trialSession : (selectedMenu ? menuName(selectedMenu.id, selectedMenu.name) : tb.complete.defaultTraining)}
             </p>
           </div>
 
           {/* 予約詳細カード */}
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
             <div className="py-2.5 text-center text-sm font-bold text-white" style={{ background: '#2C5F3F' }}>
-              ご予約内容
+              {tb.complete.cardTitle}
             </div>
-            <Row label="日付">
-              {formatDate(booking.date)}　{booking.time}〜{endTime}
+            <Row label={tb.complete.date}>
+              {tb.dateTime(formatDate(booking.date), booking.time, endTime)}
             </Row>
-            <Row label="メニュー">
-              {selectedMenu?.name}　{booking.duration}分
+            <Row label={tb.complete.menu}>
+              {tb.confirm.menuLine(selectedMenu ? menuName(selectedMenu.id, selectedMenu.name) : '', tb.duration(booking.duration))}
             </Row>
             {priceInfo && (
-              <Row label="料金（消費税込）">
+              <Row label={tb.complete.price}>
                 <span className="font-bold" style={{ color: '#2C5F3F' }}>
-                  {isTrial ? '初回 ' : ''}¥{priceInfo.discounted.toLocaleString()}円
+                  {isTrial ? tb.complete.first : ''}¥{priceInfo.discounted.toLocaleString()}{tb.yenSuffix}
                 </span>
-                <span className="text-xs text-gray-500 ml-1">（現地決済）</span>
+                <span className="text-xs text-gray-500 ml-1">{tb.complete.payOnsite}</span>
               </Row>
             )}
           </div>
 
           {/* 次のステップ説明 */}
           <div className="rounded-2xl p-4 text-xs leading-relaxed" style={{ background: '#FFF8E7', border: '1px solid #D4AF37', color: '#7A6520' }}>
-            <p className="font-bold mb-2">📋 次のステップ</p>
-            <p>① トレーナーがレンタルジムの空きを確認します</p>
-            <p>② <strong>前日22時まで</strong>にLINEで確定通知をお送りします</p>
-            <p>③ 確定後にジムの場所をご案内します📍</p>
+            <p className="font-bold mb-2">{tb.complete.nextTitle}</p>
+            <p>{tb.complete.step1}</p>
+            <p>{tb.complete.step2Before}<strong>{tb.complete.step2Strong}</strong>{tb.complete.step2After}</p>
+            <p>{tb.complete.step3}</p>
           </div>
         </div>
 
@@ -106,7 +105,7 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
             className="w-full py-3 rounded-2xl font-bold text-sm"
             style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff' }}
           >
-            トップに戻る
+            {tb.complete.backTop}
           </button>
         </div>
       </div>
@@ -118,7 +117,7 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
     <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
       {/* ヘッダー */}
       <div className="text-white text-center py-3 font-bold text-base tracking-widest" style={{ background: ALIGN_GREEN }}>
-        ご予約完了
+        {tb.complete.header}
       </div>
 
       <div className="flex-1 overflow-y-auto pb-36 px-4 pt-6 space-y-5">
@@ -131,44 +130,44 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
             ✓
           </div>
           <p className="font-bold text-lg" style={{ color: ALIGN_GREEN_DARK }}>
-            ご予約が確定しました
+            {tb.complete.confirmed}
           </p>
           <p className="text-xs mt-1" style={{ color: '#6A6D6B' }}>
-            またのご来店を心よりお待ちしております
+            {tb.complete.seeYou}
           </p>
         </div>
 
         {/* 予約詳細カード */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="py-2.5 text-center text-sm font-bold text-white" style={{ background: ALIGN_GREEN_DARK }}>
-            ご予約内容
+            {tb.complete.cardTitle}
           </div>
 
           {booking.bookingRef && (
-            <Row label="予約番号">
+            <Row label={tb.complete.bookingNo}>
               <span className="font-bold tracking-wider">{booking.bookingRef}</span>
             </Row>
           )}
-          <Row label="日付">
-            {formatDate(booking.date)}　{booking.time}〜{endTime}
+          <Row label={tb.complete.date}>
+            {tb.dateTime(formatDate(booking.date), booking.time, endTime)}
           </Row>
-          <Row label="メニュー">
-            {selectedMenu?.name}　{booking.duration}分
+          <Row label={tb.complete.menu}>
+            {tb.confirm.menuLine(selectedMenu ? menuName(selectedMenu.id, selectedMenu.name) : '', tb.duration(booking.duration))}
           </Row>
           {priceInfo && (
-            <Row label="合計（消費税込）">
+            <Row label={tb.complete.total}>
               <span className="font-bold" style={{ color: ALIGN_GREEN_DARK }}>
-                ¥{priceInfo.discounted.toLocaleString()}円
+                ¥{priceInfo.discounted.toLocaleString()}{tb.yenSuffix}
               </span>
-              <span className="text-xs text-gray-500 ml-1">（現地決済）</span>
+              <span className="text-xs text-gray-500 ml-1">{tb.complete.payOnsite}</span>
             </Row>
           )}
         </div>
 
         {/* お知らせ */}
         <div className="rounded-2xl p-4 text-xs leading-relaxed" style={{ background: '#EEF3F0', border: '1px solid #C8D9CE', color: '#3A5A46' }}>
-          <p className="font-bold mb-1" style={{ color: ALIGN_GREEN_DARK }}>ご来店について</p>
-          <p>ご予約時間の5分前からご来店可能です。<br />ご不明な点はLINEよりお気軽にお問い合わせください。</p>
+          <p className="font-bold mb-1" style={{ color: ALIGN_GREEN_DARK }}>{tb.complete.visitTitle}</p>
+          <p>{tb.complete.visitLines[0]}<br />{tb.complete.visitLines[1]}</p>
         </div>
       </div>
 
@@ -183,14 +182,14 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
             background: `linear-gradient(90deg, ${ALIGN_GREEN} 0%, ${ALIGN_GREEN_DARK} 100%)`,
           }}
         >
-          新しく予約する　→
+          {tb.complete.newBooking}
         </button>
         <button
           onClick={onViewHistory}
           className="w-full py-3 rounded-2xl font-bold text-sm"
           style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff' }}
         >
-          予約確認ページへ
+          {tb.complete.viewHistory}
         </button>
       </div>
     </div>

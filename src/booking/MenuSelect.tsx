@@ -1,5 +1,7 @@
 import React from 'react';
 import type { BookingSession, Menu } from './types';
+import { useBookingText } from '../i18n/useBookingText';
+import { LangToggle } from './LangToggle';
 
 interface MenuSelectProps {
   menus: Menu[];
@@ -14,24 +16,6 @@ const ALIGN_GREEN = '#557A64';
 const ALIGN_GREEN_DARK = '#3A5A46';
 const ALIGN_GREEN_LIGHT = '#EEF3F0';
 
-const MENU_META: Record<string, { desc: string }> = {
-  oil: {
-    desc: '全身のコリや疲れを癒すオイルトリートメント',
-  },
-  seitai: {
-    desc: '骨格・姿勢を整える本格整体ケア',
-  },
-  oil_first: {
-    desc: '初めての方限定のオイルトリートメント',
-  },
-  seitai_first: {
-    desc: '初めてのお客様限定！骨格・姿勢を整える本格整体ケア',
-  },
-  training_first: {
-    desc: '初めてのお客様限定のパーソナルトレーニング',
-  },
-};
-
 export const MenuSelect: React.FC<MenuSelectProps> = ({
   menus,
   booking,
@@ -40,6 +24,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
   onNext,
   loading,
 }) => {
+  const { tb, menuName } = useBookingText();
   const selectedMenu = menus.find(m => m.id === booking.menu);
   const selectedPrice = selectedMenu?.prices[booking.duration];
 
@@ -57,17 +42,18 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
     const min = Math.min(...prices.map(p => p.discounted));
     const max = Math.max(...prices.map(p => p.discounted));
     if (min === max) return `¥${min.toLocaleString()}`;
-    return `¥${min.toLocaleString()} 〜 ¥${max.toLocaleString()}`;
+    return `¥${min.toLocaleString()}${tb.menuSelect.rangeSeparator}¥${max.toLocaleString()}`;
   };
 
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#F7FAF8' }}>
       {/* ヘッダー */}
       <div
-        className="text-white text-center py-3 font-bold text-base tracking-widest"
+        className="relative text-white text-center py-3 font-bold text-base tracking-widest"
         style={{ background: ALIGN_GREEN }}
       >
-        メニュー
+        {tb.menuSelect.header}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2"><LangToggle /></div>
       </div>
 
       {/* コンテンツ */}
@@ -78,18 +64,18 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
             Deep Relaxation
           </p>
           <p className="text-xs mt-0.5" style={{ color: '#6A6D6B' }}>
-            ご希望のメニューをお選びください
+            {tb.menuSelect.subtitle}
           </p>
         </div>
 
         {/* メニューカード */}
         <div className="px-4 space-y-3">
           {loading && menus.length === 0 ? (
-            <div className="text-center py-12" style={{ color: '#6A6D6B' }}>読み込み中...</div>
+            <div className="text-center py-12" style={{ color: '#6A6D6B' }}>{tb.menuSelect.loading}</div>
           ) : (
             menus.map(menu => {
               const isSelected = booking.menu === menu.id;
-              const meta = MENU_META[menu.id] ?? { desc: '' };
+              const desc = tb.menuDesc[menu.id] ?? '';
               const durations = Object.keys(menu.prices).map(Number);
 
               return (
@@ -120,7 +106,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
                             className="font-bold text-base leading-snug tracking-wide"
                             style={{ color: isSelected ? ALIGN_GREEN_DARK : '#1A1A1A' }}
                           >
-                            {menu.name}
+                            {menuName(menu.id, menu.name)}
                           </p>
                           {isSelected ? (
                             <span
@@ -137,7 +123,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
                           )}
                         </div>
                         <p className="text-xs mt-1 leading-relaxed" style={{ color: '#8A9A8E' }}>
-                          {meta.desc}
+                          {desc}
                         </p>
                         <p className="text-sm font-semibold mt-2" style={{ color: ALIGN_GREEN }}>
                           {getPriceRange(menu)}
@@ -153,7 +139,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
                       style={{ borderColor: ALIGN_GREEN, background: ALIGN_GREEN_LIGHT }}
                     >
                       <p className="text-xs font-bold mb-2" style={{ color: ALIGN_GREEN_DARK }}>
-                        施術時間を選択
+                        {tb.menuSelect.chooseDuration}
                       </p>
                       <div className="grid grid-cols-2 gap-2">
                         {durations.map(dur => {
@@ -170,7 +156,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
                                 color: isSelectedDur ? '#FFFFFF' : '#333333',
                               }}
                             >
-                              <p className="font-bold text-sm">{price.label}</p>
+                              <p className="font-bold text-sm">{tb.duration(dur, price.label)}</p>
                               {price.original !== price.discounted && (
                                 <p
                                   className="text-xs mt-0.5"
@@ -199,14 +185,14 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
           className="mx-4 mt-6 rounded-2xl p-4 text-xs"
           style={{ background: '#EEF3F0', border: '1px solid #C8D9CE', color: '#3A5A46' }}
         >
-          <p className="font-bold mb-2" style={{ color: ALIGN_GREEN_DARK }}>ご来店について</p>
+          <p className="font-bold mb-2" style={{ color: ALIGN_GREEN_DARK }}>{tb.menuSelect.visitTitle}</p>
           <ul className="space-y-1.5">
-            <li className="flex gap-2"><span style={{ color: ALIGN_GREEN }}>●</span>ご予約時間の5分前からご来店可能です。早く着きそうな場合はLINEでご確認おねがいします</li>
+            <li className="flex gap-2"><span style={{ color: ALIGN_GREEN }}>●</span>{tb.menuSelect.visitNote}</li>
             <li className="flex gap-2 flex-col">
-              <div className="flex gap-2"><span style={{ color: ALIGN_GREEN }}>●</span><span>キャンセルについて</span></div>
+              <div className="flex gap-2"><span style={{ color: ALIGN_GREEN }}>●</span><span>{tb.menuSelect.cancelTitle}</span></div>
               <div className="ml-4 space-y-0.5" style={{ color: '#5A7A6A' }}>
-                <p>前日23時まで：無料</p>
-                <p>当日キャンセル：全額</p>
+                <p>{tb.menuSelect.cancelFree}</p>
+                <p>{tb.menuSelect.cancelFull}</p>
               </div>
             </li>
           </ul>
@@ -221,10 +207,10 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
               className="text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0"
               style={{ background: ALIGN_GREEN }}
             >
-              選択中
+              {tb.menuSelect.selected}
             </span>
             <span className="text-sm font-bold truncate" style={{ color: ALIGN_GREEN_DARK }}>
-              {selectedMenu?.name}
+              {selectedMenu && menuName(selectedMenu.id, selectedMenu.name)}
             </span>
             <span className="text-sm font-bold ml-auto flex-shrink-0" style={{ color: ALIGN_GREEN }}>
               ¥{selectedPrice.discounted.toLocaleString()}
@@ -232,7 +218,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
           </div>
         ) : (
           <p className="text-xs text-center mb-3" style={{ color: '#9E9E9E' }}>
-            メニューを選択してください
+            {tb.menuSelect.pickMenu}
           </p>
         )}
         <button
@@ -249,7 +235,7 @@ export const MenuSelect: React.FC<MenuSelectProps> = ({
             opacity: booking.menu && !loading ? 1 : 0.7,
           }}
         >
-          次へ　→
+          {tb.menuSelect.next}
         </button>
       </div>
     </div>

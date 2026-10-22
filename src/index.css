@@ -277,6 +277,22 @@ nav a:hover {
   color: var(--bg-darker);
 }
 
+.lang-toggle--light {
+  margin: 0;
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.lang-toggle--light button {
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 0.7rem;
+}
+
+.lang-toggle--light button.is-active {
+  background-color: #fff;
+  color: #557A64;
+}
+
 /* Hero */
 .hero {
   position: relative;
