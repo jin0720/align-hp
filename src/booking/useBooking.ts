@@ -6,6 +6,7 @@ import { useState, useCallback, useEffect } from 'react';
 import liff from '@line/liff';
 import { useLang } from '../i18n/LanguageContext';
 import { useBookingText } from '../i18n/useBookingText';
+import { massageListPrices } from '../pricing';
 import type {
   BookingStep,
   BookingSession,
@@ -33,26 +34,28 @@ const campaignPrice = (original: number, discounted: number, label: string) => (
   label,
 });
 
-const FALLBACK_MENUS: Menu[] = [
+/** マッサージ/整体の料金（切替日時で新料金へ自動切替・キャンペーン割引込み） */
+const massagePrices = (): Menu['prices'] =>
+  Object.fromEntries(
+    Object.entries(massageListPrices()).map(([d, original]) => [d, campaignPrice(original, original - 1000, `${d}分`)])
+  );
+
+/** 初回限定: 定価から1,000円OFF（常設） */
+const firstTimeMassagePrices = (): Menu['prices'] =>
+  Object.fromEntries(
+    Object.entries(massageListPrices()).map(([d, original]) => [d, { original, discounted: original - 1000, label: `${d}分` }])
+  );
+
+const buildFallbackMenus = (): Menu[] => [
   {
     id: 'oil',
     name: 'オイルマッサージ',
-    prices: {
-      70:  campaignPrice(10000, 9000,  '70分'),
-      100: campaignPrice(13000, 12000, '100分'),
-      130: campaignPrice(16000, 15000, '130分'),
-      160: campaignPrice(19000, 18000, '160分'),
-    },
+    prices: massagePrices(),
   },
   {
     id: 'seitai',
     name: '整体',
-    prices: {
-      70:  campaignPrice(10000, 9000,  '70分'),
-      100: campaignPrice(13000, 12000, '100分'),
-      130: campaignPrice(16000, 15000, '130分'),
-      160: campaignPrice(19000, 18000, '160分'),
-    },
+    prices: massagePrices(),
   },
   {
     id: 'training',
@@ -73,22 +76,12 @@ const FALLBACK_MENUS: Menu[] = [
   {
     id: 'oil_first',
     name: '初回オイルマッサージ(1000円OFF)',
-    prices: {
-      70:  { original: 10000, discounted: 9000,  label: '70分' },
-      100: { original: 13000, discounted: 12000, label: '100分' },
-      130: { original: 16000, discounted: 15000, label: '130分' },
-      160: { original: 19000, discounted: 18000, label: '160分' },
-    },
+    prices: firstTimeMassagePrices(),
   },
   {
     id: 'seitai_first',
     name: '初回整体(1000円OFF)',
-    prices: {
-      70:  { original: 10000, discounted: 9000,  label: '70分' },
-      100: { original: 13000, discounted: 12000, label: '100分' },
-      130: { original: 16000, discounted: 15000, label: '130分' },
-      160: { original: 19000, discounted: 18000, label: '160分' },
-    },
+    prices: firstTimeMassagePrices(),
   },
   {
     id: 'training_first',
@@ -205,7 +198,7 @@ export function useBooking() {
       setMenus(data);
     } catch (err) {
       console.warn('メニュー取得失敗、フォールバックを使用:', err);
-      setMenus(FALLBACK_MENUS);
+      setMenus(buildFallbackMenus());
     } finally {
       setLoading(false);
     }

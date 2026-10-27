@@ -3,6 +3,7 @@ import { MessageCircle, Clock, User, CheckCircle, Heart, Activity, MapPin, Menu,
 import { BookingFlow } from './booking';
 import { useLang } from './i18n/LanguageContext';
 import { Rich } from './i18n/Rich';
+import { massageListPrices } from './pricing';
 
 function PriceDisplay({ original }: { original: number }) {
   return <span className="price-amount">¥{original.toLocaleString()}</span>;
@@ -11,6 +12,7 @@ function PriceDisplay({ original }: { original: number }) {
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, lang, setLang } = useLang();
+  const massagePrices = massageListPrices();
   
   // ── ルーティング判定 ────────────────────────────────────
   const isBookingPage = window.location.pathname.startsWith('/booking');
@@ -200,7 +202,7 @@ function App() {
                       <span className="course-name">{t.price.oil70}</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={10000} />
+                      <PriceDisplay original={massagePrices[70]} />
                     </div>
                   </div>
                   <div className="price-item recommended">
@@ -210,7 +212,7 @@ function App() {
                       <span className="course-name">{t.price.oil100}</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={14000} />
+                      <PriceDisplay original={massagePrices[100]} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -219,7 +221,7 @@ function App() {
                       <span className="course-name">{t.price.oil130}</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={18000} />
+                      <PriceDisplay original={massagePrices[130]} />
                     </div>
                   </div>
                   <div className="price-item">
@@ -228,7 +230,7 @@ function App() {
                       <span className="course-name">{t.price.oil160}</span>
                     </div>
                     <div className="price-amount-wrap">
-                      <PriceDisplay original={21000} />
+                      <PriceDisplay original={massagePrices[160]} />
                     </div>
                   </div>
                 </div>
