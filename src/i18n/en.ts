@@ -48,7 +48,6 @@ export const en: Dict = {
   price: {
     subtitle: 'Menu & Price',
     oilDesc: 'Deep-tissue stretching & relaxation massage',
-    oilOffer: 'Discount when you book via LINE',
     oil70: 'Release tension throughout your body and relax deeply, in body and mind',
     oil100: 'Close, powerful contact carefully relieves everyday stiffness and fatigue (our most popular)',
     oil130: 'A luxurious long course that melts away tension from head to toe',

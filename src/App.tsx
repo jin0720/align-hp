@@ -193,7 +193,6 @@ function App() {
               <div className="menu-category">
                 <h3 className="category-title">Deep Relaxation</h3>
                 <p className="category-desc">{t.price.oilDesc}</p>
-                <p className="category-offer">{t.price.oilOffer}</p>
                 
                 <div className="price-card elegant-card">
                   <div className="price-item">
