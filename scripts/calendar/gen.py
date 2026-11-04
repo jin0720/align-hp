@@ -15,7 +15,7 @@ def capacity(slots):
             n += 1; nxt = t + BLOCK
     return n
 
-OVERRIDES = {5:('few',2),6:('few',3),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),25:('closed',None),28:('few',3),29:('few',3)}
+OVERRIDES = {5:('few',1),6:('few',3),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),25:('closed',None),28:('few',3),29:('few',3)}
 
 def status(d):
     if d.month == 11 and d.day in OVERRIDES: return OVERRIDES[d.day]
