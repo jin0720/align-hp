@@ -143,11 +143,12 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3"
+           style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 32px)' }}>
         <button
           onClick={onNewBooking}
-          className="w-full py-3 rounded font-bold text-white transition"
-          style={{ backgroundColor: BRAND }}
+          className="w-full rounded-2xl font-bold text-white text-lg transition"
+          style={{ backgroundColor: BRAND, height: '56px' }}
         >
           {tb.history.newBooking}
         </button>
