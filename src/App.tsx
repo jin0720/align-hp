@@ -76,6 +76,7 @@ function App() {
             <li><a href="#profile" onClick={(e) => { e.preventDefault(); scrollTo('profile'); }}>{t.nav.profile}</a></li>
 
             <li><a href="#access" onClick={(e) => { e.preventDefault(); scrollTo('access'); }}>{t.nav.access}</a></li>
+            <li><a href="#hours" onClick={(e) => { e.preventDefault(); scrollTo('hours'); }}>{t.nav.hours}</a></li>
           </ul>
           <a href="#contact" className="nav-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>{t.nav.reserve}</a>
           <div className="lang-toggle" role="group" aria-label="Language">
@@ -399,6 +400,37 @@ function App() {
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      <section id="hours" className="section-padding dark-section access-section">
+        <div className="container">
+          <div className="fade-in-section">
+            <div className="section-header">
+              <h2>Hours</h2>
+              <p className="subtitle">{t.hours.title}</p>
+            </div>
+            <div className="hours-container">
+              {([
+                { title: t.hours.regularTitle, rows: t.hours.regular },
+                { title: t.hours.holidayTitle, rows: t.hours.holiday },
+              ]).map((table) => (
+                <div className="hours-card" key={table.title}>
+                  <h4>{table.title}</h4>
+                  <ul className="hours-list">
+                    {table.rows.map((row) => (
+                      <li className={`hours-row${row.type === 'closed' ? ' is-closed' : ''}`} key={row.day}>
+                        <span className="hours-day">{row.day}</span>
+                        <span className="hours-time">
+                          {row.type === 'closed' ? t.hours.closed : row.type === 'booking' ? t.hours.lastBooking : t.hours.lastTreatment}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
 
           </div>
         </div>

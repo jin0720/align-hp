@@ -11,6 +11,7 @@ export const en: Dict = {
     price: 'Menu & Price',
     profile: 'Profile',
     access: 'Access',
+    hours: 'Hours',
     reserve: 'Book Now',
     toggleMenu: 'Toggle menu',
   },
@@ -92,6 +93,33 @@ export const en: Dict = {
     training2: '(2) 4 min walk from Nakano Station',
     training3: '(3) 4 min walk from Nakano-Sakaue Station',
     trainingNote: '* We will guide you to one of the locations (1), (2) or (3), depending on availability.',
+  },
+
+  hours: {
+    title: 'Business Days & Hours',
+    regularTitle: 'Regular Business Days & Hours',
+    holidayTitle: 'Special Hours When Monday Is a Public Holiday',
+    closed: 'Closed',
+    lastBooking: '9:00–last booking 22:00',
+    lastTreatment: '9:00–last treatment ends 18:10',
+    regular: [
+      { day: 'Monday', type: 'closed' },
+      { day: 'Tuesday', type: 'closed' },
+      { day: 'Wednesday', type: 'booking' },
+      { day: 'Thursday', type: 'booking' },
+      { day: 'Friday', type: 'booking' },
+      { day: 'Saturday', type: 'booking' },
+      { day: 'Sunday', type: 'treatment' },
+    ],
+    holiday: [
+      { day: 'Monday (public holiday)', type: 'treatment' },
+      { day: 'Tuesday', type: 'closed' },
+      { day: 'Wednesday', type: 'closed' },
+      { day: 'Thursday', type: 'booking' },
+      { day: 'Friday', type: 'booking' },
+      { day: 'Saturday', type: 'booking' },
+      { day: 'Sunday', type: 'treatment' },
+    ],
   },
 
   contact: {

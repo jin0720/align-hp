@@ -1291,6 +1291,68 @@ nav a:hover {
   font-style: italic;
 }
 
+/* Business Hours */
+
+.hours-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 991px) {
+  .hours-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hours-card {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 30px;
+}
+
+.hours-card h4 {
+  color: var(--text-main);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hours-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.hours-row .hours-time {
+  text-align: right;
+}
+
+.hours-row.is-closed {
+  color: var(--text-light);
+}
+
+@media (max-width: 600px) {
+  .hours-card {
+    padding: 20px;
+  }
+  .hours-row {
+    font-size: 0.85rem;
+  }
+}
+
 .access-notice-box {
   background-color: rgba(184, 158, 115, 0.05);
   border: 1px solid var(--border-color);

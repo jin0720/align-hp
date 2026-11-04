@@ -10,6 +10,7 @@ export const ja = {
     price: '料金案内',
     profile: 'プロフィール',
     access: 'アクセス',
+    hours: '営業日・営業時間',
     reserve: 'ご予約はこちら',
     toggleMenu: 'メニューを開閉',
   },
@@ -91,6 +92,33 @@ export const ja = {
     training2: '② 中野駅徒歩4分',
     training3: '③ 中野坂上駅徒歩4分',
     trainingNote: '※空き状況により①②③いずれかの場所をご案内します。',
+  },
+
+  hours: {
+    title: '営業日・営業時間',
+    regularTitle: '通常の営業日・営業時間',
+    holidayTitle: '月曜日が祝日の場合の特別営業',
+    closed: '定休日',
+    lastBooking: '9:00〜最終受付22:00',
+    lastTreatment: '9:00〜最終施術終了18:10',
+    regular: [
+      { day: '月曜日', type: 'closed' },
+      { day: '火曜日', type: 'closed' },
+      { day: '水曜日', type: 'booking' },
+      { day: '木曜日', type: 'booking' },
+      { day: '金曜日', type: 'booking' },
+      { day: '土曜日', type: 'booking' },
+      { day: '日曜日', type: 'treatment' },
+    ] as { day: string; type: 'closed' | 'booking' | 'treatment' }[],
+    holiday: [
+      { day: '月曜日（祝日）', type: 'treatment' },
+      { day: '火曜日', type: 'closed' },
+      { day: '水曜日', type: 'closed' },
+      { day: '木曜日', type: 'booking' },
+      { day: '金曜日', type: 'booking' },
+      { day: '土曜日', type: 'booking' },
+      { day: '日曜日', type: 'treatment' },
+    ] as { day: string; type: 'closed' | 'booking' | 'treatment' }[],
   },
 
   contact: {
