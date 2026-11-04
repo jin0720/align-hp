@@ -99,11 +99,12 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
         </div>
 
         {/* 下部ボタン */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3 pb-6">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3"
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 32px)' }}>
           <button
             onClick={onNewBooking}
-            className="w-full py-3 rounded-2xl font-bold text-sm"
-            style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff' }}
+            className="w-full rounded-2xl font-bold text-base"
+            style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff', height: '48px' }}
           >
             {tb.complete.backTop}
           </button>
@@ -172,7 +173,8 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
       </div>
 
       {/* 下部ボタン */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3 pb-6 space-y-2">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg px-4 pt-3 space-y-2"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 32px)' }}>
         <button
           onClick={onNewBooking}
           className="w-full font-bold text-white flex items-center justify-center rounded-2xl"
@@ -186,8 +188,8 @@ export const BookingComplete: React.FC<BookingCompleteProps> = ({
         </button>
         <button
           onClick={onViewHistory}
-          className="w-full py-3 rounded-2xl font-bold text-sm"
-          style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff' }}
+          className="w-full rounded-2xl font-bold text-base"
+          style={{ color: ALIGN_GREEN, border: '1.5px solid #C8D9CE', background: '#fff', height: '48px' }}
         >
           {tb.complete.viewHistory}
         </button>
