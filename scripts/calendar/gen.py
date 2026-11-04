@@ -76,7 +76,7 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .legend{{display:flex;justify-content:center;gap:22px;margin:36px 0 22px;font-size:24px;color:#555}}
 .legend span{{display:flex;align-items:center;gap:8px}}
 .legend i{{width:22px;height:22px;border-radius:50%;display:inline-block}}
-.note{{text-align:center;color:#6A6D6B;font-size:24px;line-height:1.9}}
+.note{{margin-top:44px;text-align:center;color:#6A6D6B;font-size:24px;line-height:1.9}}
 .upd{{text-align:center;color:#6A6D6B;font-size:24px;margin-top:8px}}
 </style></head><body>
 <h1>{Y} / {M:02d}</h1>
@@ -84,12 +84,6 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 <div class="grid">
 {''.join(f'<div class="dow{" sun" if i==0 else " sat" if i==6 else ""}">{n}</div>' for i,n in enumerate(["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]))}
 {''.join(cells)}
-</div>
-<div class="legend">
-<span><i style="background:#E3EEE7"></i>空きあり</span>
-<span><i style="background:#FCE9C8"></i>残り◯枠</span>
-<span><i style="background:#F6D5D8"></i>満</span>
-<span><i style="background:#ECECEC"></i>休</span>
 </div>
 <div class="note">営業時間 9:00〜最終受付22:00（日曜は最終施術終了18:10）<br>ご予約は公式LINEまたはInstagramのDMから承っております</div>
 <div class="upd">{TODAY.month}/{TODAY.day} 更新</div>
