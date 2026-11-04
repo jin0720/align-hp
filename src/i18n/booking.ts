@@ -43,8 +43,8 @@ export const bookingJa = {
   duration: (n: number, apiLabel?: string) => apiLabel ?? `${n}分`,
 
   datetime: {
-    prevWeek: '前の一週間',
-    nextWeek: '次の一週間',
+    prevWeek: '前の週',
+    nextWeek: '次の週',
     dateHeader: '日時',
     loading: '読み込み中...',
     selected: '選択中',
@@ -201,7 +201,7 @@ export const bookingEn: BookingDict = {
   duration: (n: number) => `${n} min`,
 
   datetime: {
-    prevWeek: 'Previous week',
+    prevWeek: 'Prev week',
     nextWeek: 'Next week',
     dateHeader: 'Date',
     loading: 'Loading...',

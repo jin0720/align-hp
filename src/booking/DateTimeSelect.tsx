@@ -137,18 +137,27 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
   return (
     <div className="fixed inset-0 flex flex-col bg-gray-50" style={{ zIndex: 0 }}>
       {/* ナビゲーション */}
-      <div className="flex items-center justify-between px-4 py-2 bg-white border-b text-sm font-bold">
+      <div className="flex items-center justify-between gap-2 px-3 py-3 bg-white border-b font-bold">
         <button
           onClick={handlePrevWeek}
           disabled={!canGoPrev}
-          style={{ color: canGoPrev ? '#557A64' : '#C8C8C8' }}
-          className={canGoPrev ? '' : 'cursor-not-allowed'}
+          style={{
+            color: canGoPrev ? '#557A64' : '#C8C8C8',
+            border: `1.5px solid ${canGoPrev ? '#557A64' : '#E0E0E0'}`,
+            fontSize: '15px',
+            minHeight: '44px',
+          }}
+          className={`rounded-full px-4 whitespace-nowrap ${canGoPrev ? '' : 'cursor-not-allowed'}`}
         >
-          {tb.datetime.prevWeek}
+          ← {tb.datetime.prevWeek}
         </button>
-        <span className="text-gray-600 text-xs">{monthLabel}</span>
-        <button onClick={handleNextWeek} style={{ color: '#557A64' }}>
-          {tb.datetime.nextWeek}
+        <span className="text-gray-700 text-sm">{monthLabel}</span>
+        <button
+          onClick={handleNextWeek}
+          style={{ color: '#fff', background: '#557A64', fontSize: '15px', minHeight: '44px' }}
+          className="rounded-full px-4 whitespace-nowrap"
+        >
+          {tb.datetime.nextWeek} →
         </button>
       </div>
 
