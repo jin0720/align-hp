@@ -1631,3 +1631,45 @@ nav a:hover {
 @media (max-width: 480px) {
   .menu-type-list { grid-template-columns: 1fr; }
 }
+
+/* Availability calendar image */
+.calendar-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.calendar-updated {
+  font-size: var(--fz-sm);
+  color: var(--text-light);
+  margin-bottom: var(--space-md, 16px);
+  letter-spacing: var(--ls-wide);
+}
+
+.calendar-img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.calendar-note {
+  font-size: var(--fz-sm);
+  color: var(--text-light);
+  margin: var(--space-lg, 24px) 0;
+  line-height: 1.8;
+}
+
+.calendar-reserve-btn {
+  display: inline-block;
+  min-height: 48px;
+  line-height: 48px;
+  padding: 0 32px;
+  border-radius: 999px;
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-decoration: none;
+}

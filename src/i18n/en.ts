@@ -11,6 +11,7 @@ export const en: Dict = {
     price: 'Menu & Price',
     profile: 'Profile',
     access: 'Access',
+    calendar: 'Availability',
     hours: 'Hours',
     reserve: 'Book Now',
     toggleMenu: 'Toggle menu',
@@ -97,6 +98,14 @@ export const en: Dict = {
     training2: '(2) 4 min walk from Nakano Station',
     training3: '(3) 4 min walk from Nakano-Sakaue Station',
     trainingNote: '* We will guide you to one of the locations (1), (2) or (3), depending on availability.',
+  },
+
+  calendar: {
+    subtitle: 'This Month\'s Open Days & Availability',
+    updated: (d: string) => `Updated ${d}`,
+    note: '* Availability changes from time to time. Please contact us via LINE for the latest openings.',
+    imgAlt: 'Calendar of open days and availability this month',
+    reserve: 'Reserve / Contact',
   },
 
   hours: {

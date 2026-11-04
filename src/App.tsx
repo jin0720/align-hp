@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MessageCircle, Clock, User, CheckCircle, Heart, Activity, MapPin, Menu, X } from 'lucide-react';
 import { BookingFlow } from './booking';
+import { CALENDAR_IMAGE, CALENDAR_UPDATED } from './calendarInfo';
 import { useLang } from './i18n/LanguageContext';
 import { Rich } from './i18n/Rich';
 import { massageListPrices } from './pricing';
@@ -76,6 +77,7 @@ function App() {
             <li><a href="#profile" onClick={(e) => { e.preventDefault(); scrollTo('profile'); }}>{t.nav.profile}</a></li>
 
             <li><a href="#access" onClick={(e) => { e.preventDefault(); scrollTo('access'); }}>{t.nav.access}</a></li>
+            <li><a href="#calendar" onClick={(e) => { e.preventDefault(); scrollTo('calendar'); }}>{t.nav.calendar}</a></li>
             <li><a href="#hours" onClick={(e) => { e.preventDefault(); scrollTo('hours'); }}>{t.nav.hours}</a></li>
           </ul>
           <a href="#contact" className="nav-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>{t.nav.reserve}</a>
@@ -410,6 +412,25 @@ function App() {
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      <section id="calendar" className="section-padding light-section">
+        <div className="container">
+          <div className="fade-in-section">
+            <div className="section-header">
+              <h2>Availability</h2>
+              <p className="subtitle">{t.calendar.subtitle}</p>
+            </div>
+            <div className="calendar-wrap">
+              <p className="calendar-updated">{t.calendar.updated(CALENDAR_UPDATED.replace(/-/g, '/'))}</p>
+              <a href={CALENDAR_IMAGE} target="_blank" rel="noopener noreferrer">
+                <img src={CALENDAR_IMAGE} alt={t.calendar.imgAlt} className="calendar-img" loading="lazy" />
+              </a>
+              <p className="calendar-note">{t.calendar.note}</p>
+              <a href="#contact" className="calendar-reserve-btn" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>{t.calendar.reserve}</a>
+            </div>
           </div>
         </div>
       </section>

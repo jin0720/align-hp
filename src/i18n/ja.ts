@@ -10,6 +10,7 @@ export const ja = {
     price: '料金案内',
     profile: 'プロフィール',
     access: 'アクセス',
+    calendar: '空き状況',
     hours: '営業日・営業時間',
     reserve: 'ご予約はこちら',
     toggleMenu: 'メニューを開閉',
@@ -96,6 +97,14 @@ export const ja = {
     training2: '② 中野駅徒歩4分',
     training3: '③ 中野坂上駅徒歩4分',
     trainingNote: '※空き状況により①②③いずれかの場所をご案内します。',
+  },
+
+  calendar: {
+    subtitle: '今月の営業日・空き状況',
+    updated: (d: string) => `${d} 更新`,
+    note: '※空き状況は随時変動します。最新の空きはLINEよりお気軽にお問い合わせください。',
+    imgAlt: '今月の営業日・空き状況カレンダー',
+    reserve: 'ご予約・お問い合わせ',
   },
 
   hours: {
