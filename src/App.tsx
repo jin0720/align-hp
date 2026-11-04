@@ -194,6 +194,16 @@ function App() {
               <div className="menu-category">
                 <h3 className="category-title">Deep Relaxation</h3>
                 <p className="category-desc">{t.price.oilDesc}</p>
+                <div className="menu-type-list">
+                  <div className="menu-type">
+                    <span className="menu-type-name">{t.price.typeOil}</span>
+                    <span className="menu-type-text">{t.price.typeOilText}</span>
+                  </div>
+                  <div className="menu-type">
+                    <span className="menu-type-name">{t.price.typeSeitai}</span>
+                    <span className="menu-type-text">{t.price.typeSeitaiText}</span>
+                  </div>
+                </div>
                 
                 <div className="price-card elegant-card">
                   <div className="price-item">

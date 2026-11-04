@@ -48,11 +48,15 @@ export const en: Dict = {
 
   price: {
     subtitle: 'Menu & Price',
-    oilDesc: 'Deep-tissue stretching & relaxation massage',
+    oilDesc: 'Choose from two treatment styles (same price)',
     oil70: 'Release tension throughout your body and relax deeply, in body and mind',
     oil100: 'Close, powerful contact carefully relieves everyday stiffness and fatigue (our most popular)',
     oil130: 'A luxurious long course that melts away tension from head to toe',
     oil160: 'Fully refresh even deeply built-up fatigue, taking all the time it needs',
+    typeOil: 'Oil Massage',
+    typeOilText: 'Full-body treatment using oil',
+    typeSeitai: 'Seitai (no oil)',
+    typeSeitaiText: 'Kneading and stretching to align your body',
     ptDesc: 'One-on-one coaching tailored to your goals',
     ptOffer: 'First visit: ¥2,000 OFF',
     pt60: 'From building basic fitness to body shaping',

@@ -1586,3 +1586,48 @@ nav a:hover {
     margin-left: var(--space-md);
   }
 }
+
+/* Oil massage / Seitai type labels */
+.menu-type-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md, 16px);
+  max-width: 800px;
+  margin: 0 auto var(--space-xl);
+}
+
+.menu-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  text-align: center;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  background: var(--bg-darker);
+}
+
+.menu-type-name {
+  font-weight: 500;
+  font-size: var(--fz-base, 1rem);
+  color: var(--primary-color);
+  letter-spacing: var(--ls-wide);
+}
+
+.menu-type-text {
+  font-size: var(--fz-sm);
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+.menu-type-note {
+  text-align: center;
+  font-size: var(--fz-sm);
+  color: var(--text-light);
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 480px) {
+  .menu-type-list { grid-template-columns: 1fr; }
+}
