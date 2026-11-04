@@ -67,7 +67,7 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
           </div>
         ) : (
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-gray-800 mb-3">{tb.history.current}</h2>
+            <h2 className="text-lg font-bold text-gray-800 mb-3">{tb.history.current}</h2>
             {history.map(booking => {
               const isPending = booking.status === '仮予約';
               const borderColor = isPending ? '#B8860B' : BRAND;
@@ -83,32 +83,32 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <p className="text-sm font-bold text-gray-800 mb-1">
+                      <p className="text-lg font-bold text-gray-800 mb-1">
                         {formatHeading(booking.date, booking.time)}
                       </p>
-                      <p className="text-xs text-gray-600">
+                      <p className="text-base text-gray-600">
                         {tb.history.timeRange(booking.time, booking.endTime)}
                       </p>
                     </div>
                     <span
-                      className="px-2 py-1 rounded text-xs font-semibold text-white"
+                      className="px-3 py-1 rounded text-sm font-semibold text-white"
                       style={{ backgroundColor: isPending ? '#B8860B' : BRAND }}
                     >
                       {isPending ? tb.history.pending : tb.history.confirmed}
                     </span>
                   </div>
 
-                  <div className="bg-gray-50 rounded p-3 mb-3 space-y-2">
-                    <div className="flex justify-between text-xs">
+                  <div className="bg-gray-50 rounded p-4 mb-4 space-y-3">
+                    <div className="flex justify-between text-base">
                       <span className="text-gray-600">{tb.history.menu}</span>
                       <span className="text-gray-800 font-semibold">{sheetMenuName(booking.menu)}</span>
                     </div>
-                    <div className="flex justify-between text-xs">
+                    <div className="flex justify-between text-base">
                       <span className="text-gray-600">{tb.history.duration}</span>
                       <span className="text-gray-800 font-semibold">{tb.duration(booking.duration)}</span>
                     </div>
                     {booking.isTraining && booking.goals && (
-                      <div className="flex justify-between text-xs">
+                      <div className="flex justify-between text-base">
                         <span className="text-gray-600">{tb.history.goals}</span>
                         <span className="text-gray-800 font-semibold text-right max-w-[60%]">{goals(booking.goals)}</span>
                       </div>
@@ -116,21 +116,21 @@ export const BookingHistory: React.FC<BookingHistoryProps> = ({
                   </div>
 
                   {booking.isTraining ? (
-                    <p className="text-xs text-center text-gray-400">
+                    <p className="text-base text-center text-gray-400">
                       {isPending ? tb.history.trainingPending : tb.history.trainingConfirmed}
                     </p>
                   ) : canCancel ? (
                     <button
                       onClick={() => onCancel(booking.rowIndex, booking)}
                       className={classnames(
-                        'w-full py-2 rounded text-sm font-semibold transition',
+                        'w-full py-3 rounded text-base font-semibold transition',
                         'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       )}
                     >
                       {tb.history.changeCancel}
                     </button>
                   ) : (
-                    <p className="text-xs text-center text-red-500">
+                    <p className="text-base text-center text-red-500">
                       {tb.history.pastDeadlineLines[0]}<br />
                       {tb.history.pastDeadlineLines[1]}
                     </p>
