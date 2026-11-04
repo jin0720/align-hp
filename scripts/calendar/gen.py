@@ -1,6 +1,6 @@
 import json, datetime, calendar, html
 Y, M = 2026, 11
-TODAY = datetime.date(2026, 11, 4)
+TODAY = datetime.date(2026, 11, 5)
 TARGET = 5
 BLOCK = 90  # 70分施術+清掃etc: 次の開始まで90分(3スロット)
 HOLIDAYS = {datetime.date(2026,11,3), datetime.date(2026,11,23)}
