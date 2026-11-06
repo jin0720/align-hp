@@ -18,7 +18,7 @@ def capacity(slots):
 OVERRIDES = {5:('few',1),6:('few',1),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),25:('closed',None),28:('few',3),29:('few',3)}
 
 # セルに添える注記 (日 -> 文言)
-NOTES = {8: '18:10まで', 23: '18:10まで', 29: '18:10まで'}
+NOTES = {6: '18:00〜20:40', 8: '18:10まで', 23: '18:10まで', 29: '18:10まで'}
 
 def status(d):
     if d < TODAY: return ('past', None)
@@ -53,7 +53,7 @@ for w in weeks:
         elif st == 'full': badge = '<div class="b full">満</div>'
         elif st == 'closed': badge = '<div class="b closed">休</div>'
         else: badge = ''
-        note = f'<div class="n">{NOTES[d.day]}</div>' if d.day in NOTES and st != 'past' else ''
+        note = f'<div class="n{" long" if len(NOTES[d.day]) > 8 else ""}">{NOTES[d.day]}</div>' if d.day in NOTES and st != 'past' else ''
         cells.append(f'<div class="{" ".join(cls)}"><div class="d">{d.day}</div>{badge}{note}</div>')
 
 page = f'''<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -75,7 +75,8 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .b{{margin:14px auto 0;font-weight:700;font-size:25px;line-height:1.1;border-radius:999px;height:52px;display:flex;align-items:center;justify-content:center;width:112px;clear:both;white-space:nowrap}}
 .today .b{{margin-top:14px}}
 .hasnote .b{{margin-top:6px}}
-.n{{margin-top:2px;font-size:20px;color:#6A6D6B;letter-spacing:1px}}
+.n{{margin-top:2px;font-size:20px;color:#6A6D6B;letter-spacing:1px;white-space:nowrap}}
+.n.long{{font-size:19px;letter-spacing:0}}
 .b.open{{background:#E3EEE7;color:#3F6A50}}
 .b.few{{background:#FCE9C8;color:#9A5B00}}
 .b.few b{{font-size:30px;margin:0 1px}}
