@@ -1,6 +1,6 @@
 import json, datetime, calendar, html
 Y, M = 2026, 11
-TODAY = datetime.date(2026, 11, 5)
+TODAY = datetime.date(2026, 11, 6)
 TARGET = 5
 BLOCK = 90  # 70分施術+清掃etc: 次の開始まで90分(3スロット)
 HOLIDAYS = {datetime.date(2026,11,3), datetime.date(2026,11,23)}
@@ -17,7 +17,11 @@ def capacity(slots):
 
 OVERRIDES = {5:('few',1),6:('few',3),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),25:('closed',None),28:('few',3),29:('few',3)}
 
+# セルに添える注記 (日 -> 文言)
+NOTES = {8: '18:10まで', 29: '18:10まで'}
+
 def status(d):
+    if d < TODAY: return ('past', None)
     if d.month == 11 and d.day in OVERRIDES: return OVERRIDES[d.day]
     if d < TODAY: return ('past', None)
     slots = json.load(open(f'data/av_{d.isoformat()}.json'))['slots']
@@ -43,12 +47,14 @@ for w in weeks:
         if d.weekday() == 5: cls.append('sat')
         if d in HOLIDAYS: cls.append('sun')
         if d == TODAY: cls.append('today')
+        if d.day in NOTES: cls.append('hasnote')
         if st == 'open': badge = '<div class="b open">空きあり</div>'
         elif st == 'few': badge = f'<div class="b few">残り<b>{rem}</b>枠</div>'
         elif st == 'full': badge = '<div class="b full">満</div>'
         elif st == 'closed': badge = '<div class="b closed">休</div>'
         else: badge = ''
-        cells.append(f'<div class="{" ".join(cls)}"><div class="d">{d.day}</div>{badge}</div>')
+        note = f'<div class="n">{NOTES[d.day]}</div>' if d.day in NOTES and st != 'past' else ''
+        cells.append(f'<div class="{" ".join(cls)}"><div class="d">{d.day}</div>{badge}{note}</div>')
 
 page = f'''<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
@@ -68,6 +74,8 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .today .d{{display:inline-block;background:#557A64;color:#fff;border-radius:999px;min-width:42px;text-align:center;padding:0 6px;margin-left:4px;float:left}}
 .b{{margin:14px auto 0;font-weight:700;font-size:25px;line-height:1.1;border-radius:999px;height:52px;display:flex;align-items:center;justify-content:center;width:112px;clear:both;white-space:nowrap}}
 .today .b{{margin-top:14px}}
+.hasnote .b{{margin-top:6px}}
+.n{{margin-top:2px;font-size:20px;color:#6A6D6B;letter-spacing:1px}}
 .b.open{{background:#E3EEE7;color:#3F6A50}}
 .b.few{{background:#FCE9C8;color:#9A5B00}}
 .b.few b{{font-size:30px;margin:0 1px}}
