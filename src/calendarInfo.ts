@@ -4,4 +4,4 @@
  */
 export const CALENDAR_IMAGE = '/images/calendar/current.png';
 /** 画像を更新した日 (YYYY-MM-DD) */
-export const CALENDAR_UPDATED = '2026-11-06';
+export const CALENDAR_UPDATED = '2026-11-10';

@@ -1,6 +1,6 @@
 import json, datetime, calendar, html
 Y, M = 2026, 11
-TODAY = datetime.date(2026, 11, 6)
+TODAY = datetime.date(2026, 11, 10)
 TARGET = 5
 BLOCK = 90  # 70分施術+清掃etc: 次の開始まで90分(3スロット)
 HOLIDAYS = {datetime.date(2026,11,3), datetime.date(2026,11,23)}
@@ -15,10 +15,10 @@ def capacity(slots):
             n += 1; nxt = t + BLOCK
     return n
 
-OVERRIDES = {5:('few',1),6:('few',1),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),25:('closed',None),28:('few',3),29:('few',3)}
+OVERRIDES = {10:('few',3),11:('few',3),15:('open',None),5:('few',1),6:('few',1),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),25:('closed',None),28:('few',3),29:('few',3)}
 
 # セルに添える注記 (日 -> 文言)
-NOTES = {6: '18:00〜20:40', 8: '18:10まで', 23: '18:10まで', 29: '18:10まで'}
+NOTES = {15: '18:10まで', 6: '18:00〜20:40', 8: '18:10まで', 23: '18:10まで', 29: '18:10まで'}
 
 def status(d):
     if d < TODAY: return ('past', None)
