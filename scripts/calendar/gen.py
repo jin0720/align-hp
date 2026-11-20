@@ -96,7 +96,7 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .c-few1{{background:#F8C7AE}} .c-few1 .lab{{color:#A6360F}}
 .c-full{{background:#F4CDD2}} .c-full .lab{{color:#B23A48}}
 .c-closed{{background:#ECECEC}}
-.cl{{margin-top:34px;text-align:center;font-size:40px;font-weight:700;color:#8A8A8A}}
+.cl{{margin-top:14px;text-align:center;font-size:40px;font-weight:700;color:#8A8A8A}}
 .note{{margin-top:44px;text-align:center;color:#6A6D6B;font-size:24px;line-height:1.9}}
 .upd{{text-align:center;color:#6A6D6B;font-size:24px;margin-top:8px}}
 </style></head><body>
