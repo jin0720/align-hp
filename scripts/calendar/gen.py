@@ -61,8 +61,8 @@ for w in weeks:
         if d.day in NOTES: cls.append('hasnote')
         if pastrow: cls.append('pr')
         lab, ccls = '', ''
-        if st == 'open': lab, ccls = '空き', 'c-open'
-        elif st == 'few': lab, ccls = f'残り{rem}', f'c-few{rem}'
+        if st == 'open': lab, ccls = '余裕あり', 'c-open'
+        elif st == 'few': lab, ccls = f'残り{rem}枠', f'c-few{rem}'
         elif st == 'full': lab, ccls = '満', 'c-full'
         elif st == 'closed': lab, ccls = '休', 'c-closed'
         if ccls: cls.append(ccls)
@@ -76,19 +76,19 @@ page = f'''<!doctype html><html lang="ja"><head><meta charset="utf-8">
 body{{width:1080px;height:1350px;background:#F9F9F8;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;color:#333;padding:72px 56px}}
 h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#557A64;letter-spacing:6px;text-align:center}}
 .sub{{text-align:center;color:#6A6D6B;font-size:30px;letter-spacing:4px;margin:10px 0 44px}}
-.grid{{display:grid;grid-template-columns:repeat(7,1fr);background:#fff;border:2px solid #E8E8E8;border-radius:12px;overflow:hidden}}
+.grid{{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:#fff;border:2px solid #E8E8E8;border-radius:12px;overflow:hidden}}
 .dow{{text-align:center;padding:16px 0;font-size:26px;color:#6A6D6B;background:#F1F4F2;font-family:'Playfair Display',serif;letter-spacing:2px}}
 .dow.sun{{color:#C25B5B}}.dow.sat{{color:#4F7FB8}}
 .cell{{min-height:190px;border-top:1px solid #E8E8E8;border-left:1px solid #E8E8E8;padding:8px 4px;text-align:center}}
 .cell:nth-child(7n+8){{border-left:none}}
 .cell.blank{{background:#FBFBFA}}
-.top{{display:flex;align-items:center;justify-content:space-between;height:42px;padding:0 6px 0 8px}}
-.d{{min-width:42px;height:42px;line-height:42px;font-size:28px;font-weight:500;text-align:center;color:#444}}
+.top{{display:flex;align-items:center;justify-content:space-between;gap:4px;height:42px;padding:0 4px 0 6px}}
+.d{{min-width:40px;height:40px;line-height:40px;font-size:27px;font-weight:500;text-align:center;color:#444}}
 .sun .d{{color:#C25B5B}}.sat .d{{color:#4F7FB8}}
 .today .d{{background:#557A64;color:#fff;border-radius:999px}}
-.lab{{font-size:23px;font-weight:700}}
+.lab{{font-size:18px;font-weight:700;white-space:nowrap;letter-spacing:0}}
 .cell.pr{{min-height:0;height:84px}}
-.n{{margin-top:14px;font-size:20px;line-height:1.35;font-weight:500;color:#333;letter-spacing:0;white-space:nowrap}}
+.n{{margin-top:14px;font-size:20px;line-height:1.35;font-weight:500;color:#333;letter-spacing:0;white-space:nowrap;text-align:left;padding-left:6px}}
 .c-open{{background:#DCEBDF}} .c-open .lab{{color:#3F6A50}}
 .c-few3{{background:#F1F0C9}} .c-few3 .lab{{color:#6F6A12}}
 .c-few2{{background:#FBE2B5}} .c-few2 .lab{{color:#8F5300}}
