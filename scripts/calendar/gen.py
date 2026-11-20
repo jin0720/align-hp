@@ -1,6 +1,6 @@
 import json, datetime, calendar, html
 Y, M = 2026, 11
-TODAY = datetime.date(2026, 11, 10)
+TODAY = datetime.date(2026, 11, 20)
 TARGET = 5
 BLOCK = 90  # 70分施術+清掃etc: 次の開始まで90分(3スロット)
 HOLIDAYS = {datetime.date(2026,11,3), datetime.date(2026,11,23)}
@@ -18,7 +18,17 @@ def capacity(slots):
 OVERRIDES = {10:('few',3),11:('few',3),15:('open',None),5:('few',1),6:('few',1),8:('few',3),12:('few',2),18:('few',2),21:('few',3),22:('few',3),24:('few',2),25:('closed',None),28:('few',2),29:('few',2)}
 
 # セルに添える注記 (日 -> 文言)
-NOTES = {24: '20:00から', 15: '18:10まで', 6: '18:00〜20:40', 8: '18:10まで', 23: '18:10まで', 29: '18:10まで'}
+NOTES = {
+    20: '11:00〜16:10\n19:00〜',
+    21: '9:00〜(70分)\n12:30〜16:40\n19:30〜',
+    22: '9:00〜11:40\n14:00〜',
+    23: '9:00〜18:10',
+    24: '20:00〜',
+    26: '12:00〜21:10',
+    27: '9:00〜13:10\n16:00〜',
+    28: '9:00〜16:40',
+    29: '9:00〜10:40\n13:00〜18:10',
+}
 
 def status(d):
     if d < TODAY: return ('past', None)
@@ -37,9 +47,10 @@ weeks = cal.monthdatescalendar(Y, M)
 cells = []
 summary = {}
 for w in weeks:
+    pastrow = all(x.month != M or x < TODAY for x in w)
     for d in w:
         if d.month != M:
-            cells.append('<div class="cell blank"></div>'); continue
+            cells.append(f'<div class="cell blank{" pr" if pastrow else ""}"></div>'); continue
         st, rem = status(d)
         summary[d.isoformat()] = (st, rem)
         cls = ['cell']
@@ -48,12 +59,13 @@ for w in weeks:
         if d in HOLIDAYS: cls.append('sun')
         if d == TODAY: cls.append('today')
         if d.day in NOTES: cls.append('hasnote')
+        if pastrow: cls.append('pr')
         if st == 'open': badge = '<div class="b open">空きあり</div>'
         elif st == 'few': badge = f'<div class="b few">残り<b>{rem}</b>枠</div>'
         elif st == 'full': badge = '<div class="b full">満</div>'
         elif st == 'closed': badge = '<div class="b closed">休</div>'
         else: badge = ''
-        note = f'<div class="n{" long" if len(NOTES[d.day]) > 8 else ""}">{NOTES[d.day]}</div>' if d.day in NOTES and st != 'past' else ''
+        note = f'<div class="n">{NOTES[d.day].replace(chr(10), "<br>")}</div>' if d.day in NOTES and st != 'past' else ''
         cells.append(f'<div class="{" ".join(cls)}"><div class="d">{d.day}</div>{badge}{note}</div>')
 
 page = f'''<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -66,7 +78,7 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .grid{{display:grid;grid-template-columns:repeat(7,1fr);background:#fff;border:2px solid #E8E8E8;border-radius:12px;overflow:hidden}}
 .dow{{text-align:center;padding:16px 0;font-size:26px;color:#6A6D6B;background:#F1F4F2;font-family:'Playfair Display',serif;letter-spacing:2px}}
 .dow.sun{{color:#C25B5B}}.dow.sat{{color:#4F7FB8}}
-.cell{{height:150px;border-top:1px solid #E8E8E8;border-left:1px solid #E8E8E8;padding:8px 4px;text-align:center}}
+.cell{{min-height:150px;border-top:1px solid #E8E8E8;border-left:1px solid #E8E8E8;padding:8px 4px;text-align:center}}
 .cell:nth-child(7n+8){{border-left:none}}
 .cell.blank{{background:#FBFBFA}}
 .d{{height:42px;line-height:42px;font-size:28px;font-weight:500;text-align:left;padding-left:8px;color:#444}}
@@ -75,8 +87,8 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .b{{margin:14px auto 0;font-weight:700;font-size:25px;line-height:1.1;border-radius:999px;height:52px;display:flex;align-items:center;justify-content:center;width:112px;clear:both;white-space:nowrap}}
 .today .b{{margin-top:14px}}
 .hasnote .b{{margin-top:6px}}
-.n{{margin-top:2px;font-size:20px;color:#6A6D6B;letter-spacing:1px;white-space:nowrap}}
-.n.long{{font-size:19px;letter-spacing:0}}
+.cell.pr{{min-height:0;height:84px}}
+.n{{margin-top:4px;font-size:19px;line-height:1.3;color:#6A6D6B;letter-spacing:0;white-space:nowrap}}
 .b.open{{background:#E3EEE7;color:#3F6A50}}
 .b.few{{background:#FCE9C8;color:#9A5B00}}
 .b.few b{{font-size:30px;margin:0 1px}}
