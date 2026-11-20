@@ -60,13 +60,14 @@ for w in weeks:
         if d == TODAY: cls.append('today')
         if d.day in NOTES: cls.append('hasnote')
         if pastrow: cls.append('pr')
-        if st == 'open': badge = '<div class="b open">空きあり</div>'
-        elif st == 'few': badge = f'<div class="b few">残り<b>{rem}</b>枠</div>'
-        elif st == 'full': badge = '<div class="b full">満</div>'
-        elif st == 'closed': badge = '<div class="b closed">休</div>'
-        else: badge = ''
+        lab, ccls = '', ''
+        if st == 'open': lab, ccls = '空き', 'c-open'
+        elif st == 'few': lab, ccls = f'残り{rem}', f'c-few{rem}'
+        elif st == 'full': lab, ccls = '満', 'c-full'
+        elif st == 'closed': lab, ccls = '休', 'c-closed'
+        if ccls: cls.append(ccls)
         note = f'<div class="n">{NOTES[d.day].replace(chr(10), "<br>")}</div>' if d.day in NOTES and st != 'past' else ''
-        cells.append(f'<div class="{" ".join(cls)}"><div class="d">{d.day}</div>{badge}{note}</div>')
+        cells.append(f'<div class="{" ".join(cls)}"><div class="top"><div class="d">{d.day}</div><div class="lab">{lab}</div></div>{note}</div>')
 
 page = f'''<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
@@ -78,25 +79,22 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .grid{{display:grid;grid-template-columns:repeat(7,1fr);background:#fff;border:2px solid #E8E8E8;border-radius:12px;overflow:hidden}}
 .dow{{text-align:center;padding:16px 0;font-size:26px;color:#6A6D6B;background:#F1F4F2;font-family:'Playfair Display',serif;letter-spacing:2px}}
 .dow.sun{{color:#C25B5B}}.dow.sat{{color:#4F7FB8}}
-.cell{{min-height:150px;border-top:1px solid #E8E8E8;border-left:1px solid #E8E8E8;padding:8px 4px;text-align:center}}
+.cell{{min-height:190px;border-top:1px solid #E8E8E8;border-left:1px solid #E8E8E8;padding:8px 4px;text-align:center}}
 .cell:nth-child(7n+8){{border-left:none}}
 .cell.blank{{background:#FBFBFA}}
-.d{{height:42px;line-height:42px;font-size:28px;font-weight:500;text-align:left;padding-left:8px;color:#444}}
+.top{{display:flex;align-items:center;justify-content:space-between;height:42px;padding:0 6px 0 8px}}
+.d{{min-width:42px;height:42px;line-height:42px;font-size:28px;font-weight:500;text-align:center;color:#444}}
 .sun .d{{color:#C25B5B}}.sat .d{{color:#4F7FB8}}
-.today .d{{display:inline-block;background:#557A64;color:#fff;border-radius:999px;min-width:42px;text-align:center;padding:0 6px;margin-left:4px;float:left}}
-.b{{margin:14px auto 0;font-weight:700;font-size:25px;line-height:1.1;border-radius:999px;height:52px;display:flex;align-items:center;justify-content:center;width:112px;clear:both;white-space:nowrap}}
-.today .b{{margin-top:14px}}
-.hasnote .b{{margin-top:6px}}
+.today .d{{background:#557A64;color:#fff;border-radius:999px}}
+.lab{{font-size:23px;font-weight:700}}
 .cell.pr{{min-height:0;height:84px}}
-.n{{margin-top:4px;font-size:19px;line-height:1.3;color:#6A6D6B;letter-spacing:0;white-space:nowrap}}
-.b.open{{background:#E3EEE7;color:#3F6A50}}
-.b.few{{background:#FCE9C8;color:#9A5B00}}
-.b.few b{{font-size:30px;margin:0 1px}}
-.b.full{{background:#F6D5D8;color:#B23A48;font-size:30px}}
-.b.closed{{background:#ECECEC;color:#8A8A8A;font-size:26px}}
-.legend{{display:flex;justify-content:center;gap:22px;margin:36px 0 22px;font-size:24px;color:#555}}
-.legend span{{display:flex;align-items:center;gap:8px}}
-.legend i{{width:22px;height:22px;border-radius:50%;display:inline-block}}
+.n{{margin-top:14px;font-size:20px;line-height:1.35;font-weight:500;color:#333;letter-spacing:0;white-space:nowrap}}
+.c-open{{background:#DCEBDF}} .c-open .lab{{color:#3F6A50}}
+.c-few3{{background:#F1F0C9}} .c-few3 .lab{{color:#6F6A12}}
+.c-few2{{background:#FBE2B5}} .c-few2 .lab{{color:#8F5300}}
+.c-few1{{background:#F8C7AE}} .c-few1 .lab{{color:#A6360F}}
+.c-full{{background:#F4CDD2}} .c-full .lab{{color:#B23A48}}
+.c-closed{{background:#ECECEC}} .c-closed .lab{{color:#8A8A8A}}
 .note{{margin-top:44px;text-align:center;color:#6A6D6B;font-size:24px;line-height:1.9}}
 .upd{{text-align:center;color:#6A6D6B;font-size:24px;margin-top:8px}}
 </style></head><body>
