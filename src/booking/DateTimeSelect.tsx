@@ -68,9 +68,9 @@ export const DateTimeSelect: React.FC<DateTimeSelectProps> = ({
 
   const timeSlots = useMemo(() => {
     const times = new Set<string>();
-    for (let h = 10; h <= 22; h++) {
+    for (let h = 10; h <= 23; h++) {
       for (const m of [0, 30]) {
-        if (h === 22 && m === 30) break;
+        if (h === 23 && m === 30) break;
         times.add(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
       }
     }
