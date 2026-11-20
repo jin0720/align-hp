@@ -61,13 +61,14 @@ for w in weeks:
         if d.day in NOTES: cls.append('hasnote')
         if pastrow: cls.append('pr')
         lab, ccls = '', ''
-        if st == 'open': lab, ccls = '余裕あり', 'c-open'
+        if st == 'open': lab, ccls = '', 'c-open'
         elif st == 'few': lab, ccls = f'残り{rem}枠', f'c-few{rem}'
         elif st == 'full': lab, ccls = '満', 'c-full'
-        elif st == 'closed': lab, ccls = '休', 'c-closed'
+        elif st == 'closed': lab, ccls = '', 'c-closed'
         if ccls: cls.append(ccls)
         note = f'<div class="n">{NOTES[d.day].replace(chr(10), "<br>")}</div>' if d.day in NOTES and st != 'past' else ''
-        cells.append(f'<div class="{" ".join(cls)}"><div class="top"><div class="d">{d.day}</div><div class="lab">{lab}</div></div>{note}</div>')
+        cl = '<div class="cl">休</div>' if st == 'closed' else ''
+        cells.append(f'<div class="{" ".join(cls)}"><div class="top"><div class="d">{d.day}</div><div class="lab">{lab}</div></div>{cl}{note}</div>')
 
 page = f'''<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
@@ -94,7 +95,8 @@ h1{{font-family:'Playfair Display',serif;font-weight:400;font-size:84px;color:#5
 .c-few2{{background:#FBE2B5}} .c-few2 .lab{{color:#8F5300}}
 .c-few1{{background:#F8C7AE}} .c-few1 .lab{{color:#A6360F}}
 .c-full{{background:#F4CDD2}} .c-full .lab{{color:#B23A48}}
-.c-closed{{background:#ECECEC}} .c-closed .lab{{color:#8A8A8A}}
+.c-closed{{background:#ECECEC}}
+.cl{{margin-top:34px;text-align:center;font-size:40px;font-weight:700;color:#8A8A8A}}
 .note{{margin-top:44px;text-align:center;color:#6A6D6B;font-size:24px;line-height:1.9}}
 .upd{{text-align:center;color:#6A6D6B;font-size:24px;margin-top:8px}}
 </style></head><body>
